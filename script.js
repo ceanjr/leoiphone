@@ -181,7 +181,7 @@ const dropAreaEdit = document.getElementById('dropAreaEdit');
 const imageUploadEdit = document.getElementById('imageUploadEdit');
 const draggedImagesPreviewEdit = document.getElementById('draggedImagesPreviewEdit');
 
-const adminToken = "12345"; // Token para simular autenticação de admin (frontend)
+const adminToken = "050990"; // Token para simular autenticação de admin (frontend)
 
 // Funções Globais (expostas ao window para onclick)
 window.showMessage = function (title, message) {

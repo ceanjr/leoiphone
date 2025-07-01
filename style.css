@@ -129,6 +129,7 @@ body {
     background-color: var(--color-gold);
     color: var(--color-text-on-light);
     border: none;
+    margin-left: 20px;
 }
 
 .edit-btn:hover {
@@ -449,14 +450,12 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
     color: var(--color-gold);
     z-index: 1002;
-    font-size: 3rem;
+    font-size: 4rem;
 }
 
 .image-carousel-modal .close:hover {
-    background-color: rgba(0, 0, 0, 0.7);
     color: var(--color-light-gold);
 }
 

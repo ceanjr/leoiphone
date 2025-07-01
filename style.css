@@ -635,6 +635,7 @@ h1 {
     .category-form-modal .modal-content,
     .manage-categories-modal .modal-content {
         padding: 15px;
+        overflow: scroll;
     }
 
     .drop-area {

@@ -1,0 +1,714 @@
+/* Definindo a paleta de cores */
+:root {
+    --color-dark-background: #1a1a1a;
+    --color-light-background: #2c2c2c;
+    /* Um cinza mais claro para elementos */
+    --color-gold: #c9ab00;
+    --color-light-gold: #b8a800;
+    --color-text-on-dark: #f8f8f8;
+    --color-text-on-light: #1a1a1a;
+    --color-border-dark: #444;
+}
+
+body {
+    font-family: 'Barlow', sans-serif;
+    background-color: var(--color-dark-background);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-text-on-dark);
+}
+
+.header-logo {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.header-logo img {
+    max-width: 240px;
+    /* Tamanho ajustado para a logo */
+    height: auto;
+    border-radius: 50%;
+    /* border: 2px solid #fff; */
+    /* Se a logo for circular */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    /* Brilho dourado */
+}
+
+.about-section p {
+    text-align: center;
+    font-size: 0.8rem;
+    margin-block: 10px 32px;
+    margin-inline: 20px;
+    color: #b0b0b0;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    background-color: var(--color-light-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border-dark);
+    margin-bottom: 64px;
+}
+
+.item {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    margin: 5px 0;
+    background-color: var(--color-dark-background);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    /* Para alinhar o texto e os botões */
+    justify-content: space-between;
+    /* Espaço entre o texto e os botões */
+    align-items: center;
+    /* Alinha verticalmente */
+    flex-wrap: wrap;
+    /* Permite que o conteúdo e botões quebrem linha se necessário */
+}
+
+.item:hover {
+    background-color: #3a3a3a;
+    /* Um pouco mais claro no hover */
+    border-color: var(--color-gold);
+}
+
+.item-content {
+    /* Novo contêiner para título e descrição */
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+.item-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--color-text-on-dark);
+}
+
+.item-description {
+    font-size: 0.85em;
+    /* Fonte menor */
+    color: #b0b0b0;
+    /* Cor mais clara */
+    margin-top: 2px;
+    /* Pequeno espaçamento do título */
+}
+
+.item-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    /* Impede que os botões encolham */
+    margin-top: 5px;
+    /* Espaçamento superior para mobile, se o conteúdo quebrar */
+}
+
+@media (min-width: 640px) {
+
+    /* Em telas maiores, alinha os botões na mesma linha */
+    .item-actions {
+        margin-top: 0;
+    }
+}
+
+.item-actions button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: var(--color-gold);
+    color: var(--color-text-on-light);
+    border: none;
+}
+
+.edit-btn:hover {
+    background-color: var(--color-light-gold);
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: var(--color-text-on-dark);
+    border: none;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Fundo mais escuro para modais */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--color-light-background);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    border: 1px solid var(--color-gold);
+    /* Borda dourada nos modais */
+    color: var(--color-text-on-dark);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border-dark);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: var(--color-gold);
+}
+
+.modal-body {
+    margin-top: 15px;
+}
+
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.photo-gallery img {
+    max-width: calc(33% - 10px);
+    height: auto;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 5px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .photo-gallery img {
+        max-width: calc(50% - 10px);
+    }
+}
+
+.close {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    color: #dc3545;
+    transition: color 0.2s ease;
+}
+
+.close:hover {
+    color: #c82333;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: flex-end;
+    max-width: 800px;
+}
+
+.auth-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-text-on-light);
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn {
+    background-color: var(--color-gold);
+    opacity: 0;
+}
+
+.login-btn:hover {
+    background-color: var(--color-light-gold);
+    opacity: 1;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+.create-product-btn,
+.create-category-btn,
+.manage-categories-btn {
+    /* Adicionado o botão de gerir categorias */
+    background-color: var(--color-gold);
+}
+
+.create-product-btn:hover,
+.create-category-btn:hover,
+.manage-categories-btn:hover {
+    background-color: var(--color-light-gold);
+}
+
+.message-modal .modal-content {
+    text-align: center;
+    max-width: 350px;
+    border: 1px solid var(--color-gold);
+}
+
+.message-modal button {
+    background-color: var(--color-gold);
+    color: var(--color-text-on-light);
+}
+
+.message-modal button:hover {
+    background-color: var(--color-light-gold);
+}
+
+/* Estilos para os modais de adição e edição de produto/categoria */
+.product-form-modal .modal-content,
+.category-form-modal .modal-content,
+.manage-categories-modal .modal-content {
+    max-width: 600px;
+    border: 1px solid var(--color-gold);
+    padding: 25px;
+}
+
+.product-form-modal .modal-header,
+.category-form-modal .modal-header,
+.manage-categories-modal .modal-header {
+    border-bottom: 1px solid var(--color-border-dark);
+    margin-bottom: 20px;
+}
+
+.product-form-modal .modal-header h2,
+.category-form-modal .modal-header h2,
+.manage-categories-modal .modal-header h2 {
+    color: var(--color-gold);
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.product-form-modal label,
+.category-form-modal label {
+    color: var(--color-text-on-dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.product-form-modal input,
+.product-form-modal textarea,
+.product-form-modal select,
+.category-form-modal input {
+    background-color: var(--color-dark-background);
+    color: var(--color-text-on-dark);
+    border: 1px solid var(--color-border-dark);
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.product-form-modal textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.item-price {
+    font-size: 1em; /* Um pouco maior que a descrição */
+    font-weight: 500;
+    color: var(--color-gold); /* Cor dourada para o preço */
+    margin-top: 5px; /* Espaçamento superior */
+    position: absolute;
+    right: 0;
+    top: 6px;
+}
+
+.product-form-modal button,
+.category-form-modal button {
+    margin-top: 25px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-gold);
+    color: var(--color-text-on-light);
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+}
+
+.product-form-modal button:hover,
+.category-form-modal button:hover {
+    background-color: var(--color-light-gold);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+}
+
+.drop-area {
+    border: 2px dashed var(--color-gold);
+    color: var(--color-gold);
+    padding: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.drop-area.highlight {
+    background-color: rgba(255, 215, 0, 0.15);
+}
+
+.drop-area p {
+    font-size: 1.1em;
+}
+
+.dragged-images-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.dragged-images-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--color-gold);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para o Carrossel de Imagens (simplificado) */
+.image-carousel-modal .modal-content {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+.carousel-image-display {
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-image-display img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid var(--color-border-dark);
+}
+
+.image-carousel-modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--color-gold);
+    z-index: 1002;
+    font-size: 3rem;
+}
+
+.image-carousel-modal .close:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--color-light-gold);
+}
+
+.carousel-counter {
+    color: var(--color-gold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+}
+
+.category-section h2 {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    color: var(--color-gold);
+    border-bottom-color: var(--color-gold);
+    padding-bottom: 5px;
+    font-weight: 500;
+}
+
+.category-filter label {
+    color: var(--color-text-on-dark);
+    display: block;
+}
+
+.category-filter select {
+    background-color: var(--color-dark-background);
+    color: var(--color-text-on-dark);
+    border: 1px solid var(--color-border-dark);
+    width: 100%;
+    padding-block: 8px;
+    border-radius: 8px;
+}
+
+.category-filter select:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+h1 {
+    color: var(--color-gold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 1002;
+    padding: 0 10px;
+}
+
+.carousel-buttons button {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--color-gold);
+    border: 1px solid var(--color-gold);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.carousel-buttons button:hover {
+    background-color: var(--color-gold);
+    color: var(--color-text-on-light);
+    transform: scale(1.1);
+}
+
+/* Estilos para o modal de confirmação de exclusão */
+.confirm-modal .modal-content {
+    text-align: center;
+    max-width: 400px;
+    border: 1px solid #dc3545;
+}
+
+.confirm-modal .modal-header h2 {
+    color: #dc3545;
+}
+
+.confirm-modal .modal-body button {
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-modal .modal-body .confirm-yes {
+    background-color: #dc3545;
+    color: white;
+}
+
+.confirm-modal .modal-body .confirm-yes:hover {
+    background-color: #c82333;
+}
+
+.confirm-modal .modal-body .confirm-no {
+    background-color: #6c757d;
+    color: white;
+}
+
+.confirm-modal .modal-body .confirm-no:hover {
+    background-color: #5a6268;
+}
+
+/* Estilos para o modal de gerir categorias */
+.manage-categories-modal .category-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--color-border-dark);
+    color: var(--color-text-on-dark);
+}
+
+.manage-categories-modal .category-list-item:last-child {
+    border-bottom: none;
+}
+
+.manage-categories-modal .category-list-item button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.manage-categories-modal .category-list-item button:hover {
+    background-color: #c82333;
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+
+    /* Para tablets e dispositivos menores */
+    .auth-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 10px;
+    }
+
+    .auth-buttons button {
+        width: calc(50% - 5px);
+        /* Dois botões por linha */
+        margin-bottom: 10px;
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+
+    .auth-buttons button:last-child {
+        margin-bottom: 0;
+        /* Remove margem do último botão */
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .product-form-modal .modal-content,
+    .category-form-modal .modal-content,
+    .manage-categories-modal .modal-content {
+        padding: 15px;
+    }
+
+    .drop-area {
+        padding: 20px;
+    }
+
+    .dragged-images-preview img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .item-actions {
+        width: 100%;
+        /* Botões de ação ocupam a largura total em mobile */
+        justify-content: flex-end;
+        /* Alinha à direita */
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Para telemóveis pequenos */
+    body {
+        padding: 10px;
+    }
+
+    .header-logo img {
+        max-width: 120px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .item {
+        padding: 8px;
+    }
+
+    .auth-buttons button {
+        width: 100%;
+        /* Um botão por linha em ecrãs muito pequenos */
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+
+    .product-form-modal .modal-content,
+    .category-form-modal .modal-content,
+    .manage-categories-modal .modal-content {
+        padding: 10px;
+    }
+
+    .product-form-modal input,
+    .product-form-modal textarea,
+    .product-form-modal select,
+    .category-form-modal input {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .product-form-modal button,
+    .category-form-modal button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .drop-area {
+        padding: 15px;
+    }
+
+    .dragged-images-preview img {
+        width: 60px;
+        height: 60px;
+        gap: 10px;
+    }
+}

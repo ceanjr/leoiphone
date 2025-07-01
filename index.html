@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Lista de Itens</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">
+    <a id="robbu-whatsapp-button" target="_blank" href="https://api.whatsapp.com/send?phone=5577988343473">
+        <div class="rwb-tooltip">Fale conosco</div>
+        <img src="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-icon.svg">
+    </a>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="auth-buttons">
+        <button id="createCategoryButton" class="create-category-btn" onclick="openAddCategoryModal()"
+            style="display: none;">Criar Categoria</button>
+        <button id="manageCategoriesButton" class="manage-categories-btn" onclick="openManageCategoriesModal()"
+            style="display: none;">Gerir Categorias</button>
+        <button id="createProductButton" class="create-product-btn" onclick="openAddProductModal()"
+            style="display: none;">Criar Novo Produto</button>
+        <button id="authButton" class="login-btn" onclick="toggleAuth()">O</button>
+    </div>
+
+    <div class="header-logo">
+        <img src="img/logo.png" alt="Léo iPhone Logo">
+    </div>
+
+    <div class="about-section">
+        <p>São mais de 10 anos no mercado de iPhones, entregando qualidade, procedência e aquele atendimento que faz
+            diferença.</p>
+    </div>
+
+    <div class="container">
+        <h1 class="text-3xl font-bold mb-6 text-center">Catálogo</h1>
+
+        <div class="category-filter">
+            <label for="categoryFilter">Filtrar por Categoria:</label>
+            <select id="categoryFilter" onchange="filterProductsByCategory()">
+                <option value="all">Tudo</option>
+                <!-- Categorias serão carregadas dinamicamente aqui -->
+            </select>
+        </div>
+
+        <ul id="itemList" class="list-none p-0">
+            <!-- Items serão carregados dinamicamente, agrupados por categoria -->
+        </ul>
+    </div>
+
+    <!-- Modal de Detalhes do Item (agora aberto a partir do carrossel) -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalDescription"></p>
+                <div class="photo-gallery" id="modalGallery">
+                    <!-- Fotos serão carregadas dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Autenticação</h2>
+                <button class="close" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center mb-4">Insira o token de administrador:</p>
+                <input type="password" id="adminTokenInput" placeholder="Token"
+                    class="w-full p-2 border border-gray-300 rounded-md">
+                <button onclick="authenticateAdmin()"
+                    class="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Mensagem Personalizado -->
+    <div class="modal message-modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="messageModalTitle"></h2>
+                <button class="close" onclick="closeMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="messageModalText"></p>
+                <button onclick="closeMessageModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal confirm-modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="confirmModalTitle">Confirmar Exclusão</h2>
+                <button class="close" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmModalText">Tem certeza que deseja remover este item?</p>
+                <button class="confirm-yes" onclick="executeConfirmedDeletion()">Sim</button>
+                <button class="confirm-no" onclick="closeConfirmModal()">Não</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel de Administração (apenas um marcador) -->
+    <div id="adminPanel" style="display: none;">
+    </div>
+
+    <!-- Modal para Adicionar Produto -->
+    <div class="modal product-form-modal" id="addProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar Novo Produto</h2>
+                <button class="close" onclick="closeAddProductModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="productTitle">Título</label>
+                <input type="text" id="productTitle" placeholder="Título do produto"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <label for="productDescription">Descrição</label>
+                <textarea id="productDescription" placeholder="Descrição do produto"
+                    class="focus:ring-blue-500 focus:border-blue-500"></textarea>
+
+                <label for="productPrice">Preço</label>
+                <input type="number" id="productPrice" placeholder="Preço do produto (ex: 99.99)" step="0.01"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <label for="productCategory">Categoria</label>
+                <select id="productCategory" class="focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Selecione uma categoria</option>
+                    <!-- Categorias serão carregadas dinamicamente -->
+                </select>
+
+                <label for="productImages">URLs das Imagens (separadas por vírgula)</label>
+                <input type="text" id="productImages" placeholder="URL1, URL2, URL3"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <div class="drop-area" id="dropAreaAdd">
+                    <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
+                    <input type="file" id="imageUploadAdd" multiple accept="image/*" style="display: none;">
+                </div>
+                <div class="dragged-images-preview" id="draggedImagesPreviewAdd"></div>
+
+                <button onclick="addProduct()">Adicionar Produto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Novo Modal para Editar Produto -->
+    <div class="modal product-form-modal" id="editProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Produto</h2>
+                <button class="close" onclick="closeEditProductModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editProductId">
+                <label for="editProductTitle">Título</label>
+                <input type="text" id="editProductTitle" placeholder="Título do produto"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <label for="editProductDescription">Descrição</label>
+                <textarea id="editProductDescription" placeholder="Descrição do produto"
+                    class="focus:ring-blue-500 focus:border-blue-500"></textarea>
+
+                <label for="editProductPrice">Preço</label>
+                <input type="number" id="editProductPrice" placeholder="Preço do produto (ex: 99.99)" step="0.01"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <label for="editProductCategory">Categoria</label>
+                <select id="editProductCategory" class="focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Selecione uma categoria</option>
+                    <!-- Categorias serão carregadas dinamicamente -->
+                </select>
+
+                <label for="editProductImages">URLs das Imagens (separadas por vírgula)</label>
+                <input type="text" id="editProductImages" placeholder="URL1, URL2, URL3"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <div class="drop-area" id="dropAreaEdit">
+                    <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
+                    <input type="file" id="imageUploadEdit" multiple accept="image/*" style="display: none;">
+                </div>
+                <div class="dragged-images-preview" id="draggedImagesPreviewEdit"></div>
+
+                <button onclick="updateProduct()">Guardar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Novo Modal para Criar Categoria -->
+    <div class="modal category-form-modal" id="addCategoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Nova Categoria</h2>
+                <button class="close" onclick="closeAddCategoryModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="categoryName">Nome da Categoria</label>
+                <input type="text" id="categoryName" placeholder="Nome da categoria"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+                <button onclick="addCategory()">Adicionar Categoria</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Novo Modal para Gerir Categorias -->
+    <div class="modal manage-categories-modal" id="manageCategoriesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerir Categorias</h2>
+                <button class="close" onclick="closeManageCategoriesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul id="manageCategoryList" class="list-none p-0">
+                    <!-- Categorias serão carregadas dinamicamente aqui para gestão -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Novo Modal para Carrossel de Imagens -->
+    <div class="modal image-carousel-modal" id="imageCarouselModal">
+        <div class="modal-content">
+            <button class="close" onclick="closeImageCarouselModal()">&times;</button>
+            <div class="carousel-image-display">
+                <img id="carouselImage" src="" alt="Imagem do Carrossel">
+            </div>
+            <div class="carousel-counter" id="carouselCounter"></div>
+            <!-- Botões de navegação explícitos -->
+            <div class="carousel-buttons">
+                <button onclick="prevImage()">&#10094;</button> <!-- Seta para a esquerda -->
+                <button onclick="nextImage()">&#10095;</button> <!-- Seta para a direita -->
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js" type="module"></script>
+</body>
+
+</html>

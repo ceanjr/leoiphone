@@ -156,7 +156,9 @@
                 </div>
                 <div class="dragged-images-preview" id="draggedImagesPreviewAdd"></div>
 
-                <button onclick="addProduct()">Adicionar Produto</button>
+                <button onclick="addProduct()" id="addProductButton">Adicionar Produto
+                    <span id="addProductSpinner" class="spinner" style="display: none;"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -238,9 +240,10 @@
     <div class="modal image-carousel-modal" id="imageCarouselModal">
         <div class="modal-content">
             <button class="close" onclick="closeImageCarouselModal()">&times;</button>
-            <div class="carousel-image-display">
-                <img id="carouselImage" src="" alt="Imagem do Carrossel">
-            </div>
+<div class="carousel-image-display">
+    <img id="carouselImage" src="" alt="Imagem do Carrossel">
+    <div id="imageLoader" class="image-loader" style="display: none;"></div>
+</div>
             <div class="carousel-counter" id="carouselCounter"></div>
             <!-- Botões de navegação explícitos -->
             <div class="carousel-buttons">

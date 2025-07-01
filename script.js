@@ -50,6 +50,7 @@ let currentImageIndex = 0;
 let currentProductInCarousel = null; // Armazena o objeto do produto atual no carrossel
 let touchStartX = 0; // Para funcionalidade de swipe
 
+
 // Inicializa o Firebase e autentica o utilizador
 async function initializeFirebase() {
     try {
@@ -157,6 +158,8 @@ const messageModal = document.getElementById("messageModal");
 const messageModalTitle = document.getElementById("messageModalTitle");
 const messageModalText = document.getElementById("messageModalText");
 const addProductModal = document.getElementById("addProductModal");
+const addProductButton = document.getElementById('addProductButton'); // NOVA LINHA
+const addProductSpinner = document.getElementById('addProductSpinner'); // NOVA LINHA
 const editProductModal = document.getElementById("editProductModal");
 const loginModal = document.getElementById("loginModal");
 const addCategoryModal = document.getElementById("addCategoryModal"); // Novo modal de categoria
@@ -165,6 +168,7 @@ const manageCategoryList = document.getElementById("manageCategoryList"); // Lis
 const imageCarouselModal = document.getElementById('imageCarouselModal'); // Novo modal de carrossel
 const carouselImage = document.getElementById('carouselImage');
 const carouselCounter = document.getElementById('carouselCounter');
+const imageLoader = document.getElementById('imageLoader'); // NOVA LINHA
 const productCategorySelect = document.getElementById('productCategory'); // Select de categoria no modal de adicionar
 const editProductCategorySelect = document.getElementById('editProductCategory'); // Select de categoria no modal de editar
 const categoryFilterDropdown = document.getElementById('categoryFilter'); // Select de filtro de categoria
@@ -654,21 +658,24 @@ window.closeEditProductModal = function () {
 }
 
 window.addProduct = async function () {
-    // ATENÇÃO: Certifique-se de usar os IDs dos elementos do modal de ADIÇÃO
-    const title = document.getElementById("productTitle").value; // Corrigido para "productTitle"
-    const description = document.getElementById("productDescription").value; // Corrigido para "productDescription"
-    const price = parseFloat(productPriceInput.value); // Já está correto para "productPriceInput"
-    const categoryId = productCategorySelect.value; // Já está correto para "productCategorySelect"
-    const textImages = document.getElementById("productImages").value.split(",").map(url => url.trim()).filter(url => url !== ""); // Corrigido para "productImages"
+    const title = document.getElementById("productTitle").value;
+    const description = document.getElementById("productDescription").value;
+    const price = parseFloat(productPriceInput.value);
+    const categoryId = productCategorySelect.value;
+    const textImages = document.getElementById("productImages").value.split(",").map(url => url.trim()).filter(url => url !== "");
 
     if (!title.trim()) {
         showMessage("Atenção", "O título do produto é obrigatório.");
         return;
     }
 
+    // --- INÍCIO: Adicionar Loader ---
+    addProductButton.disabled = true; // Desabilita o botão
+    addProductSpinner.style.display = 'inline-block'; // Mostra o spinner
+    // --- FIM: Adicionar Loader ---
+
     try {
         const uploadedUrls = [];
-        // Processar arquivos arrastados/selecionados
         for (const file of uploadedImageFilesAdd) {
             const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
             await uploadBytes(storageRef, file);
@@ -676,7 +683,6 @@ window.addProduct = async function () {
             uploadedUrls.push(downloadURL);
         }
 
-        // Combinar com as URLs inseridas manualmente
         const combinedImages = [...uploadedUrls, ...textImages];
 
         const itemsCollectionRef = collection(db, `artifacts/${appId}/public/data/items`);
@@ -697,6 +703,11 @@ window.addProduct = async function () {
     } catch (error) {
         console.error("Erro ao adicionar produto:", error);
         showMessage("Erro", "Não foi possível adicionar o produto. Verifique sua conexão ou tente novamente.");
+    } finally {
+        // --- INÍCIO: Remover Loader (sempre executa) ---
+        addProductButton.disabled = false; // Habilita o botão
+        addProductSpinner.style.display = 'none'; // Esconde o spinner
+        // --- FIM: Remover Loader ---
     }
 }
 
@@ -810,11 +821,31 @@ window.closeImageCarouselModal = function () {
 };
 
 function updateCarouselImage() {
+    // Esconde a imagem atual e mostra o loader
+    carouselImage.classList.remove('loaded');
+    imageLoader.style.display = 'block';
+
     if (currentCarouselImages.length > 0) {
-        carouselImage.src = currentCarouselImages[currentImageIndex];
+        const imgUrl = currentCarouselImages[currentImageIndex];
+        carouselImage.src = imgUrl;
         carouselCounter.textContent = `${currentImageIndex + 1} / ${currentCarouselImages.length}`;
+
+        // Evento para esconder o loader quando a imagem carregar
+        carouselImage.onload = () => {
+            imageLoader.style.display = 'none';
+            carouselImage.classList.add('loaded'); // Adiciona a classe para mostrar
+        };
+
+        // Evento para esconder o loader se a imagem falhar
+        carouselImage.onerror = () => {
+            imageLoader.style.display = 'none';
+            carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Imagem+Nao+Disponivel`;
+            carouselImage.classList.add('loaded');
+        };
     } else {
+        imageLoader.style.display = 'none'; // Esconde o loader se não houver imagens
         carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Sem+Imagens`;
+        carouselImage.classList.add('loaded'); // Mostra o placeholder
         carouselCounter.textContent = "0 / 0";
     }
 }

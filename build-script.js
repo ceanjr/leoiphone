@@ -25,6 +25,8 @@ scriptContent = scriptContent.replace(/apiKey: ".*",/, `apiKey: "${firebaseApiKe
 
 const outputPath = path.join(__dirname, 'dist', 'script.js'); // Onde seu script final será salvo
 const outputHtmlPath = path.join(__dirname, 'dist', 'index.html'); // Onde seu HTML final será salvo
+const outputCssPath = path.join(__dirname, 'dist', 'style.css');
+const outputImgDir = path.join(__dirname, 'dist', 'img'); // Caminho da pasta img no destino
 
 // Crie a pasta 'dist' se ela não existir
 if (!fs.existsSync(path.join(__dirname, 'dist'))){
@@ -33,6 +35,17 @@ if (!fs.existsSync(path.join(__dirname, 'dist'))){
 
 fs.writeFileSync(outputPath, scriptContent);
 console.log(`script.js built with ADMIN_TOKEN: ${adminToken}`);
+
+if (!fs.existsSync(outputImgDir)){
+    fs.mkdirSync(outputImgDir); // Crie a pasta 'img' dentro de 'dist'
+}
+const sourceImgDir = path.join(__dirname, 'img');
+fs.readdirSync(sourceImgDir).forEach(file => {
+    const sourceFile = path.join(sourceImgDir, file);
+    const destFile = path.join(outputImgDir, file);
+    fs.copyFileSync(sourceFile, destFile);
+});
+console.log("Image files copied to dist/img/");
 
 // Copie os outros arquivos (HTML, CSS, imagens) para a pasta 'dist'
 fs.copyFileSync(path.join(__dirname, 'index.html'), outputHtmlPath);

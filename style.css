@@ -343,6 +343,7 @@ body {
     margin-bottom: 8px;
     text-align: left;
     width: 100%;
+    display: block;
 }
 
 .product-form-modal input,

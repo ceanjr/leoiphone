@@ -135,6 +135,10 @@
                 <input type="text" id="productTitle" placeholder="Título do produto"
                     class="focus:ring-blue-500 focus:border-blue-500">
 
+                <label for="productCode">Código do Produto (Opcional)</label>
+                <input type="text" id="productCode" placeholder="Ex: IP15PM-AZUL-256GB"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
                 <label for="productDescription">Descrição</label>
                 <textarea id="productDescription" placeholder="Descrição do produto"
                     class="focus:ring-blue-500 focus:border-blue-500"></textarea>
@@ -177,6 +181,10 @@
                 <input type="hidden" id="editProductId">
                 <label for="editProductTitle">Título</label>
                 <input type="text" id="editProductTitle" placeholder="Título do produto"
+                    class="focus:ring-blue-500 focus:border-blue-500">
+
+                <label for="editProductCode">Código do Produto (Opcional)</label>
+                <input type="text" id="editProductCode" placeholder="Ex: IP15PM-AZUL-256GB"
                     class="focus:ring-blue-500 focus:border-blue-500">
 
                 <label for="editProductDescription">Descrição</label>
@@ -239,42 +247,43 @@
         </div>
     </div>
 
-<div class="modal image-carousel-modal" id="imageCarouselModal">
-    <div class="modal-content">
-        <button class="close" onclick="closeImageCarouselModal()">&times;</button>
-        <div class="carousel-image-display">
-            <img id="carouselImage" src="" alt="Imagem do Carrossel">
-            <div id="imageLoader" class="image-loader" style="display: none;"></div>
-            <div class="carousel-counter" id="carouselCounter"></div>
-            <div class="carousel-dots" id="carouselDots"></div>
-            <div class="carousel-buttons">
-                <button onclick="prevImage()">&#10094;</button>
-                <button onclick="nextImage()">&#10095;</button>
+    <div class="modal image-carousel-modal" id="imageCarouselModal">
+        <div class="modal-content">
+            <button class="close" onclick="closeImageCarouselModal()">&times;</button>
+            <div class="carousel-image-display">
+                <img id="carouselImage" src="" alt="Imagem do Carrossel">
+                <div id="imageLoader" class="image-loader" style="display: none;"></div>
+                <div class="carousel-counter" id="carouselCounter"></div>
+                <div class="carousel-dots" id="carouselDots"></div>
+                <div class="carousel-buttons">
+                    <button onclick="prevImage()">&#10094;</button>
+                    <button onclick="nextImage()">&#10095;</button>
+                </div>
+            </div>
+            <div class="carousel-info">
+                <h3 id="carouselProductTitle" class="carousel-product-title"></h3>
+                <p id="carouselProductDescription" class="carousel-product-description"></p>
+                <p id="carouselProductPrice" class="carousel-product-price"></p>
+            </div>
+
+            <div class="carousel-share-buttons">
+                <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('leo')">
+                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong>Léo</strong>
+                </button>
+                <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('junior')">
+                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong>
+                        Júnior</strong>
+                </button>
             </div>
         </div>
-        <div class="carousel-info">
-            <h3 id="carouselProductTitle" class="carousel-product-title"></h3>
-            <p id="carouselProductDescription" class="carousel-product-description"></p>
-            <p id="carouselProductPrice" class="carousel-product-price"></p>
-        </div>
+    </div>
 
-        <div class="carousel-share-buttons">
-            <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('leo')">
-                <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong>Léo</strong>
-            </button>
-                        <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('junior')">
-                <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong> Júnior</strong>
-            </button>
+    <div class="modal fullscreen-image-modal" id="fullscreenImageModal">
+        <div class="modal-content-fullscreen">
+            <span class="close-fullscreen" onclick="closeFullscreenImageModal()">&times;</span>
+            <img id="fullscreenImage" src="" alt="Imagem em Tela Cheia">
         </div>
     </div>
-</div>
-
-<div class="modal fullscreen-image-modal" id="fullscreenImageModal">
-    <div class="modal-content-fullscreen">
-        <span class="close-fullscreen" onclick="closeFullscreenImageModal()">&times;</span>
-        <img id="fullscreenImage" src="" alt="Imagem em Tela Cheia">
-    </div>
-</div>
 
     <script src="./script.js" type="module"></script>
 </body>

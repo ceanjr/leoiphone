@@ -175,6 +175,8 @@ const fullscreenImageModal = document.getElementById('fullscreenImageModal');
 const fullscreenImage = document.getElementById('fullscreenImage');
 const productCategorySelect = document.getElementById('productCategory'); // Select de categoria no modal de adicionar
 const editProductCategorySelect = document.getElementById('editProductCategory'); // Select de categoria no modal de editar
+const productCodeInput = document.getElementById('productCode'); // NOVO
+const editProductCodeInput = document.getElementById('editProductCode');
 const categoryFilterDropdown = document.getElementById('categoryFilter'); // Select de filtro de categoria
 const confirmModal = document.getElementById('confirmModal'); // Modal de confirmação
 const confirmModalText = document.getElementById('confirmModalText');
@@ -441,6 +443,14 @@ function renderItems() {
                 itemTitle.className = "item-title";
                 itemContent.appendChild(itemTitle);
 
+                // NOVO: Exibir Código do Produto
+                if (item.code && item.code.trim() !== "") {
+                    const productCodeSpan = document.createElement("span");
+                    productCodeSpan.textContent = `cod:.${item.code}`; // Ex: (IP15PM-AZUL)
+                    productCodeSpan.className = "product-code";
+                    itemContent.appendChild(productCodeSpan); // Adiciona código ao wrapper
+                }
+
                 const itemDescription = document.createElement("div");
                 itemDescription.textContent = item.description;
                 itemDescription.className = "item-description";
@@ -574,6 +584,7 @@ window.closeAddProductModal = function () {
     productPriceInput.value = ""; // Limpa o campo de preço
     document.getElementById("productImages").value = "";
     productCategorySelect.value = "";
+    productCodeInput.value = "";
     uploadedImageUrlsAdd = [];
     draggedImagesPreviewAdd.innerHTML = "";
     uploadedImageFilesAdd = []; // Limpa os arquivos
@@ -585,6 +596,7 @@ window.openEditProductModal = function (item) {
     document.getElementById("editProductTitle").value = item.title;
     document.getElementById("editProductDescription").value = item.description;
     editProductPriceInput.value = item.price || "";
+    editProductCodeInput.value = item.code || "";
     editProductCategorySelect.value = item.categoryId || "";
 
     // REMOVA ESTA LINHA:
@@ -652,6 +664,7 @@ window.closeEditProductModal = function () {
     editingItemId = null;
     document.getElementById("editProductId").value = "";
     document.getElementById("editProductTitle").value = "";
+    editProductCodeInput.value = "";
     document.getElementById("editProductDescription").value = "";
     editProductPriceInput.value = ""; // Limpa o campo de preço
     document.getElementById("editProductImages").value = "";
@@ -666,6 +679,7 @@ window.addProduct = async function () {
     const description = document.getElementById("productDescription").value;
     const price = parseFloat(productPriceInput.value);
     const categoryId = productCategorySelect.value;
+    const code = productCodeInput.value.trim(); // NOVO: Obter o código
     const textImages = document.getElementById("productImages").value.split(",").map(url => url.trim()).filter(url => url !== "");
 
     if (!title.trim()) {
@@ -693,6 +707,7 @@ window.addProduct = async function () {
 
         const newProduct = {
             title,
+            code: code,
             description: description || "",
             price: isNaN(price) ? null : price,
             categoryId: categoryId || "",
@@ -725,6 +740,7 @@ window.updateProduct = async function () {
     const description = document.getElementById("editProductDescription").value;
     const price = parseFloat(editProductPriceInput.value);
     const categoryId = editProductCategorySelect.value;
+    const code = editProductCodeInput.value.trim();
     const textImages = document.getElementById("editProductImages").value.split(",").map(url => url.trim()).filter(url => url !== "");
 
     if (!title.trim()) {
@@ -774,6 +790,7 @@ window.updateProduct = async function () {
 
         const updatedProduct = {
             title,
+            code: code,
             description: description || "",
             price: isNaN(price) ? null : price,
             categoryId: categoryId || "",
@@ -843,13 +860,16 @@ window.shareProductOnWhatsApp = function (name) {
     const productPrice = currentProductInCarousel.price !== undefined && currentProductInCarousel.price !== null
         ? ` por R$ ${parseFloat(currentProductInCarousel.price).toFixed(2).replace('.', ',')}`
         : "";
-    
+    const productCode = currentProductInCarousel.code && currentProductInCarousel.code.trim() !== ""
+        ? ` (Cód: ${currentProductInCarousel.code})` // NOVO: Adiciona o código se existir
+        : "";
+
     // O link para o seu WhatsApp que você já tem no HTML: "https://api.whatsapp.com/send?phone=5577988343473"
     // Pegue apenas o número de telefone da URL base
     const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126'; // Substitua pelo seu número real (com DDI e DDD)
 
     // Mensagem a ser compartilhada (personalize!)
-    let message = `Tenho interesse nesse produto: *${productName}*${productPrice}!\n`;
+    let message = `Tenho interesse nesse produto: *${productName}${productCode}*${productPrice}!\n`;
     // message += `Para mais detalhes, fale conosco via WhatsApp: `;
     // Adicionar o link para a sua página principal, já que não temos um link direto para o produto específico.
     // Você pode querer mudar isso para o URL real do seu catálogo se for publicado.

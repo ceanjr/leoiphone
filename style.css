@@ -85,10 +85,22 @@ body {
     padding-right: 10px;
 }
 
+.product-code {
+    font-size: 0.7em; /* Fonte menor */
+    color: #888; /* Uma cor mais discreta, cinza */
+    margin-left: 8px; /* Espaçamento à esquerda do título */
+    font-weight: normal; /* Para não ser muito chamativo */
+    display: inline; /* Garante que fique na mesma linha */
+    text-align: center;
+    vertical-align: middle;
+}
+
 .item-title {
     font-size: 1.1em;
     font-weight: 500;
     color: var(--color-text-on-dark);
+        display: inline-block;
+    vertical-align: bottom;
 }
 
 .item-description {

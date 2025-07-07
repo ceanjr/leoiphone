@@ -1,5 +1,9 @@
 {
-  "dependencies": {
-    "serve": "^14.2.4"
+  "name": "leoiphone",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "start": "live-server",
+    "build": "node build-script.js"
   }
 }

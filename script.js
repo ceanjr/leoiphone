@@ -50,7 +50,6 @@ let currentImageIndex = 0;
 let currentProductInCarousel = null; // Armazena o objeto do produto atual no carrossel
 let touchStartX = 0; // Para funcionalidade de swipe
 
-
 // Inicializa o Firebase e autentica o utilizador
 async function initializeFirebase() {
     try {
@@ -172,6 +171,8 @@ const imageLoader = document.getElementById('imageLoader'); // NOVA LINHA
 const carouselProductTitle = document.getElementById('carouselProductTitle');
 const carouselProductDescription = document.getElementById('carouselProductDescription');
 const carouselProductPrice = document.getElementById('carouselProductPrice');
+const fullscreenImageModal = document.getElementById('fullscreenImageModal');
+const fullscreenImage = document.getElementById('fullscreenImage');
 const productCategorySelect = document.getElementById('productCategory'); // Select de categoria no modal de adicionar
 const editProductCategorySelect = document.getElementById('editProductCategory'); // Select de categoria no modal de editar
 const categoryFilterDropdown = document.getElementById('categoryFilter'); // Select de filtro de categoria
@@ -189,6 +190,19 @@ const imageUploadEdit = document.getElementById('imageUploadEdit');
 const draggedImagesPreviewEdit = document.getElementById('draggedImagesPreviewEdit');
 
 const adminToken = "050990"; // Token para simular autenticação de admin (frontend)
+
+const allModals = [
+    itemModal,         // Modal de detalhes (se ainda estiver em uso)
+    loginModal,
+    messageModal,
+    confirmModal,
+    addProductModal,
+    editProductModal,
+    addCategoryModal,
+    manageCategoriesModal,
+    imageCarouselModal,
+    fullscreenImageModal // O novo modal de tela cheia
+];
 
 // Funções Globais (expostas ao window para onclick)
 window.showMessage = function (title, message) {
@@ -846,6 +860,19 @@ function updateCarouselDots() {
     }
 }
 
+window.openFullscreenImageModal = function (imageUrl) {
+    if (imageUrl) {
+        fullscreenImage.src = imageUrl;
+        fullscreenImageModal.style.display = 'flex';
+    }
+};
+
+// NOVO: Função para fechar a imagem em tela cheia
+window.closeFullscreenImageModal = function () {
+    fullscreenImageModal.style.display = 'none';
+    fullscreenImage.src = ''; // Limpa a imagem ao fechar
+};
+
 function updateCarouselImage() {
     carouselImage.classList.remove('loaded');
     imageLoader.style.display = 'block';
@@ -854,6 +881,11 @@ function updateCarouselImage() {
         const imgUrl = currentCarouselImages[currentImageIndex];
         carouselImage.src = imgUrl;
         carouselCounter.textContent = `${currentImageIndex + 1} / ${currentCarouselImages.length}`;
+
+        // Adiciona o evento de clique à imagem do carrossel para abrir em tela cheia
+        carouselImage.onclick = () => {
+            openFullscreenImageModal(imgUrl);
+        };
 
         // Evento para esconder o loader quando a imagem carregar
         carouselImage.onload = () => {
@@ -872,9 +904,10 @@ function updateCarouselImage() {
         carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Sem+Imagens`;
         carouselImage.classList.add('loaded');
         carouselCounter.textContent = "0 / 0";
+        carouselImage.onclick = null; // Remove o evento se não houver imagem
     }
 
-    updateCarouselDots(); // Mantenha essa chamada para os indicadores de navegação
+    updateCarouselDots();
 }
 
 window.nextImage = function () {
@@ -1174,6 +1207,58 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
         reader.readAsDataURL(file);
     }
 }
+
+// --- LÓGICA GLOBAL PARA FECHAR MODAIS AO CLICAR FORA ---
+document.addEventListener('click', function(event) {
+    // Itera sobre todos os modais definidos
+    allModals.forEach(modal => {
+        // Verifica se o modal está visível
+        if (modal.style.display === 'flex') {
+            const modalContent = modal.querySelector('.modal-content, .modal-content-fullscreen'); // Pega o conteúdo do modal
+            
+            // Verifica se o clique não foi dentro do conteúdo do modal
+            // E garante que não estamos clicando nos botões de fechar ou nos botões de navegação do carrossel
+            if (modalContent && !modalContent.contains(event.target) && !event.target.closest('.close') && !event.target.closest('.close-fullscreen') && !event.target.closest('.carousel-buttons')) {
+                // Chama a função de fechar específica para cada modal
+                // Usamos um switch ou if/else if para lidar com as diferentes funções de fechamento
+                switch (modal.id) {
+                    case 'itemModal':
+                        closeModal();
+                        break;
+                    case 'loginModal':
+                        closeLoginModal();
+                        break;
+                    case 'messageModal':
+                        closeMessageModal();
+                        break;
+                    case 'confirmModal':
+                        closeConfirmModal();
+                        break;
+                    case 'addProductModal':
+                        closeAddProductModal();
+                        break;
+                    case 'editProductModal':
+                        closeEditProductModal();
+                        break;
+                    case 'addCategoryModal':
+                        closeAddCategoryModal();
+                        break;
+                    case 'manageCategoriesModal':
+                        closeManageCategoriesModal();
+                        break;
+                    case 'imageCarouselModal':
+                        // O carrossel já tem sua própria lógica, mas mantemos aqui por consistência
+                        closeImageCarouselModal();
+                        break;
+                    case 'fullscreenImageModal':
+                        closeFullscreenImageModal();
+                        break;
+                    // Adicione mais casos se tiver outros modais
+                }
+            }
+        }
+    });
+});
 
 // Inicializa o Firebase e carrega os itens ao carregar a página
 window.onload = initializeFirebase;

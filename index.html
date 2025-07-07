@@ -246,17 +246,24 @@
         <div class="carousel-image-display">
             <img id="carouselImage" src="" alt="Imagem do Carrossel">
             <div id="imageLoader" class="image-loader" style="display: none;"></div>
+            <div class="carousel-counter" id="carouselCounter"></div>
+            <div class="carousel-buttons">
+                <button onclick="prevImage()">&#10094;</button> 
+                <button onclick="nextImage()">&#10095;</button> 
+            </div>
         </div>
         <div class="carousel-info"> <h3 id="carouselProductTitle" class="carousel-product-title"></h3>
             <p id="carouselProductDescription" class="carousel-product-description"></p>
             <p id="carouselProductPrice" class="carousel-product-price"></p>
         </div>
-        <div class="carousel-counter" id="carouselCounter"></div>
         <div class="carousel-dots" id="carouselDots"></div> 
-        <div class="carousel-buttons">
-            <button onclick="prevImage()">&#10094;</button> 
-            <button onclick="nextImage()">&#10095;</button> 
-        </div>
+    </div>
+</div>
+
+<div class="modal fullscreen-image-modal" id="fullscreenImageModal">
+    <div class="modal-content-fullscreen">
+        <span class="close-fullscreen" onclick="closeFullscreenImageModal()">&times;</span>
+        <img id="fullscreenImage" src="" alt="Imagem em Tela Cheia">
     </div>
 </div>
 

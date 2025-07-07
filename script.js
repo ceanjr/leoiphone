@@ -169,6 +169,9 @@ const imageCarouselModal = document.getElementById('imageCarouselModal'); // Nov
 const carouselImage = document.getElementById('carouselImage');
 const carouselCounter = document.getElementById('carouselCounter');
 const imageLoader = document.getElementById('imageLoader'); // NOVA LINHA
+const carouselProductTitle = document.getElementById('carouselProductTitle');
+const carouselProductDescription = document.getElementById('carouselProductDescription');
+const carouselProductPrice = document.getElementById('carouselProductPrice');
 const productCategorySelect = document.getElementById('productCategory'); // Select de categoria no modal de adicionar
 const editProductCategorySelect = document.getElementById('editProductCategory'); // Select de categoria no modal de editar
 const categoryFilterDropdown = document.getElementById('categoryFilter'); // Select de filtro de categoria
@@ -789,19 +792,23 @@ window.updateProduct = async function () {
 
 // Funções para o Carrossel de Imagens
 window.openImageCarouselModal = function (product) {
-    currentProductInCarousel = product; // Armazena o produto completo
+    currentProductInCarousel = product; 
     currentCarouselImages = product.images;
-    currentImageIndex = 0; // Começa sempre na primeira imagem
-    updateCarouselImage();
+    currentImageIndex = 0; 
+
+    // NOVO: Preencher as informações do produto
+    carouselProductTitle.textContent = product.title;
+    carouselProductDescription.textContent = product.description || "Sem descrição."; // Fallback para descrição vazia
+    if (product.price !== undefined && product.price !== null) {
+        carouselProductPrice.textContent = `R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}`;
+    } else {
+        carouselProductPrice.textContent = "Preço não disponível";
+    }
+
+    updateCarouselImage(); // Já chama a função que atualiza a imagem e o contador
     imageCarouselModal.style.display = 'flex';
 
-    // Adicionar event listeners de toque para swipe
-    carouselImage.addEventListener('touchstart', handleTouchStart, false);
-    carouselImage.addEventListener('touchmove', handleTouchMove, false);
-    carouselImage.addEventListener('touchend', handleTouchEnd, false);
-
-    // Adicionar event listener para fechar ao clicar fora do modal
-    imageCarouselModal.addEventListener('click', handleCarouselModalOutsideClick);
+    // ... (event listeners de toque e clique fora) ...
 };
 
 window.closeImageCarouselModal = function () {
@@ -811,17 +818,35 @@ window.closeImageCarouselModal = function () {
     currentImageIndex = 0;
     currentProductInCarousel = null;
 
-    // Remover event listeners de toque
-    carouselImage.removeEventListener('touchstart', handleTouchStart);
-    carouselImage.removeEventListener('touchmove', handleTouchMove);
-    carouselImage.removeEventListener('touchend', handleTouchEnd);
+    // NOVO: Limpar as informações do produto ao fechar
+    carouselProductTitle.textContent = "";
+    carouselProductDescription.textContent = "";
+    carouselProductPrice.textContent = "";
 
-    // Remover event listener para fechar ao clicar fora do modal
-    imageCarouselModal.removeEventListener('click', handleCarouselModalOutsideClick);
+    // ... (remover event listeners de toque e clique fora) ...
 };
 
+function updateCarouselDots() {
+    const carouselDots = document.getElementById('carouselDots');
+    carouselDots.innerHTML = ''; // Limpa os dots existentes
+
+    if (currentCarouselImages.length > 1) { // Só mostra os dots se houver mais de 1 imagem
+        currentCarouselImages.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('carousel-dot');
+            if (index === currentImageIndex) {
+                dot.classList.add('active');
+            }
+            dot.onclick = () => {
+                currentImageIndex = index;
+                updateCarouselImage();
+            };
+            carouselDots.appendChild(dot);
+        });
+    }
+}
+
 function updateCarouselImage() {
-    // Esconde a imagem atual e mostra o loader
     carouselImage.classList.remove('loaded');
     imageLoader.style.display = 'block';
 
@@ -833,7 +858,7 @@ function updateCarouselImage() {
         // Evento para esconder o loader quando a imagem carregar
         carouselImage.onload = () => {
             imageLoader.style.display = 'none';
-            carouselImage.classList.add('loaded'); // Adiciona a classe para mostrar
+            carouselImage.classList.add('loaded');
         };
 
         // Evento para esconder o loader se a imagem falhar
@@ -843,11 +868,13 @@ function updateCarouselImage() {
             carouselImage.classList.add('loaded');
         };
     } else {
-        imageLoader.style.display = 'none'; // Esconde o loader se não houver imagens
+        imageLoader.style.display = 'none';
         carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Sem+Imagens`;
-        carouselImage.classList.add('loaded'); // Mostra o placeholder
+        carouselImage.classList.add('loaded');
         carouselCounter.textContent = "0 / 0";
     }
+
+    updateCarouselDots(); // Mantenha essa chamada para os indicadores de navegação
 }
 
 window.nextImage = function () {

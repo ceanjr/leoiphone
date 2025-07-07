@@ -48,16 +48,15 @@
             <label for="categoryFilter">Filtrar por Categoria:</label>
             <select id="categoryFilter" onchange="filterProductsByCategory()">
                 <option value="all">Tudo</option>
-                <!-- Categorias serão carregadas dinamicamente aqui -->
+                
             </select>
         </div>
 
         <ul id="itemList" class="list-none p-0">
-            <!-- Items serão carregados dinamicamente, agrupados por categoria -->
+            
         </ul>
     </div>
 
-    <!-- Modal de Detalhes do Item (agora aberto a partir do carrossel) -->
     <div class="modal" id="itemModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -67,13 +66,12 @@
             <div class="modal-body">
                 <p id="modalDescription"></p>
                 <div class="photo-gallery" id="modalGallery">
-                    <!-- Fotos serão carregadas dinamicamente -->
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Login -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -90,7 +88,6 @@
         </div>
     </div>
 
-    <!-- Modal de Mensagem Personalizado -->
     <div class="modal message-modal" id="messageModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -104,7 +101,6 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmação de Exclusão -->
     <div class="modal confirm-modal" id="confirmModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -119,11 +115,9 @@
         </div>
     </div>
 
-    <!-- Painel de Administração (apenas um marcador) -->
     <div id="adminPanel" style="display: none;">
     </div>
 
-    <!-- Modal para Adicionar Produto -->
     <div class="modal product-form-modal" id="addProductModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,7 +144,7 @@
                 <label for="productCategory">Categoria</label>
                 <select id="productCategory" class="focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Selecione uma categoria</option>
-                    <!-- Categorias serão carregadas dinamicamente -->
+                    
                 </select>
 
                 <label for="productImages">URLs das Imagens (separadas por vírgula)</label>
@@ -170,7 +164,6 @@
         </div>
     </div>
 
-    <!-- Novo Modal para Editar Produto -->
     <div class="modal product-form-modal" id="editProductModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -198,7 +191,7 @@
                 <label for="editProductCategory">Categoria</label>
                 <select id="editProductCategory" class="focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Selecione uma categoria</option>
-                    <!-- Categorias serão carregadas dinamicamente -->
+                    
                 </select>
 
                 <label for="editProductImages">URLs das Imagens (separadas por vírgula)</label>
@@ -216,7 +209,6 @@
         </div>
     </div>
 
-    <!-- Novo Modal para Criar Categoria -->
     <div class="modal category-form-modal" id="addCategoryModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,7 +224,6 @@
         </div>
     </div>
 
-    <!-- Novo Modal para Gerir Categorias -->
     <div class="modal manage-categories-modal" id="manageCategoriesModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -241,7 +232,7 @@
             </div>
             <div class="modal-body">
                 <ul id="manageCategoryList" class="list-none p-0">
-                    <!-- Categorias serão carregadas dinamicamente aqui para gestão -->
+                    
                 </ul>
             </div>
         </div>

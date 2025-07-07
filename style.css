@@ -1,8 +1,6 @@
-/* Definindo a paleta de cores */
 :root {
     --color-dark-background: #1a1a1a;
     --color-light-background: #2c2c2c;
-    /* Um cinza mais claro para elementos */
     --color-gold: #c9ab00;
     --color-light-gold: #b8a800;
     --color-text-on-dark: #f8f8f8;
@@ -27,13 +25,9 @@ body {
 
 .header-logo img {
     max-width: 240px;
-    /* Tamanho ajustado para a logo */
     height: auto;
     border-radius: 50%;
-    /* border: 2px solid #fff; */
-    /* Se a logo for circular */
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-    /* Brilho dourado */
 }
 
 .about-section p {
@@ -64,33 +58,27 @@ body {
     background-color: var(--color-dark-background);
     transition: background-color 0.3s ease, border-color 0.3s ease;
     display: flex;
-    /* Para alinhar o texto e os botões */
     justify-content: space-between;
-    /* Espaço entre o texto e os botões */
     align-items: center;
-    /* Alinha verticalmente */
     flex-wrap: wrap;
-    /* Permite que o conteúdo e botões quebrem linha se necessário */
 }
 
 .item:hover {
     background-color: #3a3a3a;
-    /* Um pouco mais claro no hover */
     border-color: var(--color-gold);
 }
 
 .item-content {
-    /* Novo contêiner para título e descrição */
     flex-grow: 1;
     padding-right: 10px;
 }
 
 .product-code {
-    font-size: 0.7em; /* Fonte menor */
-    color: #888; /* Uma cor mais discreta, cinza */
-    margin-left: 8px; /* Espaçamento à esquerda do título */
-    font-weight: normal; /* Para não ser muito chamativo */
-    display: inline; /* Garante que fique na mesma linha */
+    font-size: 0.7em;
+    color: #888;
+    margin-left: 8px;
+    font-weight: normal;
+    display: inline;
     text-align: center;
     vertical-align: middle;
 }
@@ -105,25 +93,18 @@ body {
 
 .item-description {
     font-size: 0.85em;
-    /* Fonte menor */
     color: #b0b0b0;
-    /* Cor mais clara */
     margin-top: 2px;
-    /* Pequeno espaçamento do título */
 }
 
 .item-actions {
     display: flex;
     gap: 10px;
     flex-shrink: 0;
-    /* Impede que os botões encolham */
     margin-top: 5px;
-    /* Espaçamento superior para mobile, se o conteúdo quebrar */
 }
 
 @media (min-width: 640px) {
-
-    /* Em telas maiores, alinha os botões na mesma linha */
     .item-actions {
         margin-top: 0;
     }
@@ -166,7 +147,6 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    /* Fundo mais escuro para modais */
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -181,7 +161,6 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     position: relative;
     border: 1px solid var(--color-gold);
-    /* Borda dourada nos modais */
     color: var(--color-text-on-dark);
 }
 
@@ -287,7 +266,6 @@ body {
 .create-product-btn,
 .create-category-btn,
 .manage-categories-btn {
-    /* Adicionado o botão de gerir categorias */
     background-color: var(--color-gold);
 }
 
@@ -312,7 +290,6 @@ body {
     background-color: var(--color-light-gold);
 }
 
-/* Estilos para os modais de adição e edição de produto/categoria */
 .product-form-modal .modal-content,
 .category-form-modal .modal-content,
 .manage-categories-modal .modal-content {
@@ -367,10 +344,10 @@ body {
 }
 
 .item-price {
-    font-size: 1em; /* Um pouco maior que a descrição */
+    font-size: 1em;
     font-weight: 500;
-    color: var(--color-gold); /* Cor dourada para o preço */
-    margin-top: 5px; /* Espaçamento superior */
+    color: var(--color-gold);
+    margin-top: 5px;
     position: absolute;
     right: 0;
     top: 6px;
@@ -436,13 +413,13 @@ body {
 .carousel-info {
     text-align: center;
     margin-top: 15px;
-    padding: 0 20px; /* Adicione padding para não grudar nas bordas */
+    padding: 0 20px;
 }
 
 .carousel-product-title {
-    font-size: 1.8em; /* Um pouco maior para destaque */
+    font-size: 1.8em;
     font-weight: 600;
-    color: var(--color-gold); /* Cor dourada para o título */
+    color: var(--color-gold);
     margin-bottom: 5px;
 }
 
@@ -450,26 +427,26 @@ body {
     font-size: 1em;
     color: var(--color-text-on-dark);
     margin-bottom: 10px;
-    max-height: 80px; /* Limitar altura para descrições longas */
-    overflow-y: auto; /* Adicionar scroll se a descrição for muito longa */
+    max-height: 80px;
+    overflow-y: auto;
 }
 
 .carousel-product-price {
     font-size: 1.3em;
     font-weight: bold;
-    color: var(--color-gold); /* Cor dourada para o preço */
+    color: var(--color-gold);
     margin-bottom: 5px;
 }
 
 .carousel-share-buttons {
     display: flex;
-    flex-wrap: wrap; /* Permite que os botões quebrem linha em telas pequenas */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px; /* Espaçamento entre os botões */
+    gap: 10px;
     margin-top: 20px;
     width: 100%;
-    padding: 0 20px; /* Adiciona padding para alinhar com o conteúdo */
-    box-sizing: border-box; /* Garante que padding não estoure a largura */
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .share-btn {
@@ -483,20 +460,20 @@ body {
     font-size: 0.95em;
     font-weight: 500;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    flex: 1 1 auto; /* Permite que os botões cresçam e encolham */
-    min-width: 180px; /* Largura mínima para botões em linha */
-    max-width: 250px; /* Largura máxima para botões */
+    flex: 1 1 auto;
+    min-width: 180px;
+    max-width: 250px;
     opacity: 0.9;
 }
 
 .share-icon {
-    width: 20px; /* Tamanho do ícone */
+    width: 20px;
     height: 20px;
     margin-right: 8px;
 }
 
 .whatsapp-share-btn {
-    background-color: #25D366; /* Cor do WhatsApp */
+    background-color: #25D366;
     color: white;
 }
 
@@ -506,7 +483,7 @@ body {
 }
 
 .copy-link-btn {
-    background-color: var(--color-gold); /* Sua cor dourada */
+    background-color: var(--color-gold);
     color: var(--color-text-on-light);
 }
 
@@ -515,32 +492,31 @@ body {
     transform: translateY(-2px);
 }
 
-/* Ajustes para telas menores */
 @media (max-width: 480px) {
     .share-btn {
-        width: 100%; /* Cada botão ocupa a largura total em telas muito pequenas */
+        width: 100%;
         max-width: none;
     }
 }
 
 .fullscreen-image-modal {
-    display: none; /* Inicia oculto */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Fundo bem escuro para destaque */
+    background-color: rgba(0, 0, 0, 0.9);
     justify-content: center;
     align-items: center;
-    z-index: 2000; /* Z-index alto para ficar acima de tudo */
-    cursor: zoom-out; /* Indica que clicar fecha */
+    z-index: 2000;
+    cursor: zoom-out;
 }
 
 .modal-content-fullscreen {
     position: relative;
-    max-width: 95vw; /* Ocupa quase toda a largura da viewport */
-    max-height: 95vh; /* Ocupa quase toda a altura da viewport */
+    max-width: 95vw;
+    max-height: 95vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -549,57 +525,56 @@ body {
 .modal-content-fullscreen img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Garante que a imagem seja totalmente visível */
+    object-fit: contain;
     border-radius: 5px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Sombra para destacar */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 
 .close-fullscreen {
     position: absolute;
     top: 15px;
     right: 15px;
-    color: #fff; /* Botão de fechar branco */
-    font-size: 2.5em; /* Tamanho maior para fácil clique */
+    color: #fff;
+    font-size: 2.5em;
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     width: 40px;
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    line-height: 1; /* Alinha o "x" verticalmente */
+    line-height: 1;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .close-fullscreen:hover {
-    background-color: #dc3545; /* Vermelho no hover */
+    background-color: #dc3545;
     color: #fff;
 }
 
-/* Estilos para o Carrossel de Imagens (simplificado) */
 .image-carousel-modal .modal-content {
-    background-color: var(--color-light-background); /* Adicione um fundo para as informações */
+    background-color: var(--color-light-background);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     border: 1px solid var(--color-gold);
-    padding: 20px; /* Aumente o padding geral do modal-content */
-    max-width: 600px; /* Limite a largura para melhor legibilidade */
+    padding: 20px;
+    max-width: 600px;
     width: 90%;
-    display: flex; /* Use flexbox para organizar conteúdo */
-    flex-direction: column; /* Organize em coluna */
-    align-items: center; /* Centralize os itens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .carousel-image-display {
     width: 100%;
-    max-height: 50vh; /* Limite a altura da imagem para deixar espaço para texto */
+    max-height: 50vh;
     height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     overflow: hidden;
-    margin-bottom: 10px; /* Espaço entre imagem e infos */
+    margin-bottom: 10px;
 }
 
 .carousel-image-display img {
@@ -611,35 +586,35 @@ body {
 }
 
 .image-carousel-modal .close {
-    color: #e20a0a; /* Cor escura no fundo claro */
+    color: #e20a0a;
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 50%;
     padding: 5px 10px;
-    font-size: 2em; /* Tamanho ajustado */
-    top: 5px; /* Posição ajustada */
-    right: 5px; /* Posição ajustada */
+    font-size: 2em;
+    top: 5px;
+    right: 5px;
     line-height: 0.8;
     position: absolute;
     z-index: 1;
 }
 
 .image-carousel-modal .close:hover {
-    background-color: var(--color-gold); /* Efeito hover */
+    background-color: var(--color-gold);
     color: var(--color-text-on-light);
 }
 
 @media (max-width: 600px) {
     .image-carousel-modal .modal-content {
         padding: 15px;
-        max-height: 90vh; /* Permitir mais altura em telas pequenas */
-        overflow-y: auto; /* Habilitar scroll se o conteúdo for grande */
+        max-height: 90vh;
+        overflow-y: auto;
     }
     .carousel-product-title {
         font-size: 1.5em;
     }
     .carousel-product-description {
         font-size: 0.9em;
-        max-height: 60px; /* Ajuste para telas menores */
+        max-height: 60px;
     }
     .carousel-product-price {
         font-size: 1.1em;
@@ -647,9 +622,9 @@ body {
 }
 
 .carousel-counter {
-    position: absolute; /* Remova o posicionamento absoluto se a informação do produto estiver abaixo */
+    position: absolute;
     transform: none;
-    margin-bottom: 10px; /* Espaço após as informações */
+    margin-bottom: 10px;
     bottom: 0;
 }
 
@@ -727,7 +702,6 @@ h1 {
     transform: scale(1.1);
 }
 
-/* Estilos para o modal de confirmação de exclusão */
 .confirm-modal .modal-content {
     text-align: center;
     max-width: 400px;
@@ -765,7 +739,6 @@ h1 {
     background-color: #5a6268;
 }
 
-/* Estilos para o modal de gerir categorias */
 .manage-categories-modal .category-list-item {
     display: flex;
     justify-content: space-between;
@@ -794,10 +767,8 @@ h1 {
     background-color: #c82333;
 }
 
-/* Media queries para responsividade */
 @media (max-width: 768px) {
 
-    /* Para tablets e dispositivos menores */
     .auth-buttons {
         flex-wrap: wrap;
         justify-content: center;
@@ -806,7 +777,6 @@ h1 {
 
     .auth-buttons button {
         width: calc(50% - 5px);
-        /* Dois botões por linha */
         margin-bottom: 10px;
         font-size: 0.9em;
         padding: 8px 15px;
@@ -814,7 +784,6 @@ h1 {
 
     .auth-buttons button:last-child {
         margin-bottom: 0;
-        /* Remove margem do último botão */
     }
 
     .modal-content {
@@ -840,15 +809,11 @@ h1 {
 
     .item-actions {
         width: 100%;
-        /* Botões de ação ocupam a largura total em mobile */
         justify-content: flex-end;
-        /* Alinha à direita */
     }
 }
 
 @media (max-width: 480px) {
-
-    /* Para telemóveis pequenos */
     body {
         padding: 10px;
     }
@@ -867,7 +832,6 @@ h1 {
 
     .auth-buttons button {
         width: 100%;
-        /* Um botão por linha em ecrãs muito pequenos */
     }
 
     .modal-content {
@@ -905,19 +869,18 @@ h1 {
     }
 }
 
-/* Loader para Imagens do Carrossel */
 .carousel-image-display {
-    position: relative; /* Garante que o loader fique posicionado corretamente */
-    background-color: var(--color-light-background); /* Fundo enquanto carrega */
+    position: relative;
+    background-color: var(--color-light-background);
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 200px; /* Altura mínima para o loader ser visível */
+    min-height: 200px;
 }
 
 .carousel-image-display img {
-    opacity: 0; /* Começa invisível */
-    transition: opacity 0.3s ease-in-out; /* Transição suave */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -926,7 +889,7 @@ h1 {
 }
 
 .carousel-image-display img.loaded {
-    opacity: 1; /* Fica visível quando carregada */
+    opacity: 1;
 }
 
 .image-loader {
@@ -940,7 +903,7 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1; /* Acima da imagem invisível */
+    z-index: 1;
 }
 
 @keyframes spin {
@@ -948,7 +911,6 @@ h1 {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Spinner geral para botões */
 .spinner {
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-top: 3px solid #fff;
@@ -961,7 +923,6 @@ h1 {
     margin-left: 8px;
 }
 
-/* Opcional: ajustar o botão quando o spinner está visível */
 .product-form-modal button:disabled {
     opacity: 0.7;
     cursor: not-allowed;

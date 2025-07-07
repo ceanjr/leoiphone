@@ -1,5 +1,3 @@
-// Variáveis globais para Firebase (AGORA DEFINIDAS MANUALMENTE PARA USO LOCAL)
-// SUBSTITUA OS VALORES ABAIXO PELOS SEUS PRÓPRIOS, OBTIDOS DA SUA CONSOLA FIREBASE.
 const firebaseConfig = {
     apiKey: "AIzaSyDrw18otUXUzzKPR2Q_jxAE2NqrvL4gj9I",
     authDomain: "leo-iphone-5c9a0.firebaseapp.com",
@@ -9,24 +7,17 @@ const firebaseConfig = {
     appId: "1:484759088723:web:7059fea6ebb48f1dcde0a6"
 };
 
-// Para uso local, o appId será o mesmo que o appId no seu firebaseConfig
 const appId = firebaseConfig.appId;
 
-// Para execução local, não temos um initialAuthToken.
-// Vamos sempre tentar autenticar anonimamente.
 const initialAuthToken = null;
 
-// --- INÍCIO: DEBUGGING FIREBASE CONFIG ---
 console.log("Configuração Firebase em uso (Local):", firebaseConfig);
 console.log("Token de autenticação inicial (Local):", initialAuthToken);
 console.log("App ID em uso (Local):", appId);
-// --- FIM: DEBUGGING FIREBASE CONFIG ---
 
-// Importações do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-// NOVO: Importações para Firebase Storage
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
 let app;
@@ -34,30 +25,27 @@ let db;
 let auth;
 let storage;
 let userId = null;
-let items = []; // Array para armazenar os itens (será populado pelo Firestore)
-let categories = []; // Novo array para armazenar as categorias
-let uploadedImageUrlsAdd = []; // Armazena URLs de imagens para o modal de adição
-let uploadedImageUrlsEdit = []; // Armazena URLs de imagens para o modal de edição
-let editingItemId = null; // Armazena o ID do item a ser editado
-let itemToDeleteId = null; // Armazena o ID do item a ser excluído
-let currentFilterCategory = 'all'; // Categoria selecionada no filtro (default: 'all')
-let uploadedImageFilesAdd = []; // NOVO: Armazena objetos File para o modal de adição
-let uploadedImageFilesEdit = []; // NOVO: Armazena objetos File para o modal de edição
+let items = [];
+let categories = [];
+let uploadedImageUrlsAdd = [];
+let uploadedImageUrlsEdit = [];
+let editingItemId = null;
+let itemToDeleteId = null;
+let currentFilterCategory = 'all';
+let uploadedImageFilesAdd = [];
+let uploadedImageFilesEdit = [];
 
-// Variáveis para o Carrossel
 let currentCarouselImages = [];
 let currentImageIndex = 0;
-let currentProductInCarousel = null; // Armazena o objeto do produto atual no carrossel
-let touchStartX = 0; // Para funcionalidade de swipe
+let currentProductInCarousel = null;
+let touchStartX = 0;
 
-// Inicializa o Firebase e autentica o utilizador
 async function initializeFirebase() {
     try {
-        // Verifica se firebaseConfig está vazio ou incompleto
         if (!firebaseConfig || Object.keys(firebaseConfig).length === 0 || !firebaseConfig.projectId) {
             console.error("Firebase Config está vazio ou incompleto. Certifique-se de que preencheu as suas credenciais.");
             showMessage("Erro de Configuração", "As credenciais do Firebase não foram carregadas corretamente. Verifique o seu código.");
-            return; // Sai da função se a configuração for inválida
+            return;
         }
 
         app = initializeApp(firebaseConfig);
@@ -65,22 +53,19 @@ async function initializeFirebase() {
         auth = getAuth(app);
         storage = getStorage(app);
 
-        // Para uso local, sempre tentamos autenticar anonimamente, pois não há um token inicial do Canvas.
         await signInAnonymously(auth);
 
-        // Observa mudanças no estado de autenticação
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 userId = user.uid;
                 console.log("Utilizador autenticado:", userId);
-                // Carrega os itens e categorias do Firestore após a autenticação
-                loadCategoriesFromFirestore(); // Carrega categorias primeiro
-                loadItemsFromFirestore(); // Depois carrega itens
-                updateAuthUI(true); // Atualiza a UI para logado
+                loadCategoriesFromFirestore();
+                loadItemsFromFirestore();
+                updateAuthUI(true);
             } else {
                 userId = null;
                 console.log("Nenhum utilizador autenticado.");
-                updateAuthUI(false); // Atualiza a UI para deslogado
+                updateAuthUI(false);
             }
         });
     } catch (error) {
@@ -89,7 +74,6 @@ async function initializeFirebase() {
     }
 }
 
-// Carrega as categorias do Firestore
 async function loadCategoriesFromFirestore() {
     if (!db) {
         console.warn("Firestore não disponível para carregar categorias.");
@@ -103,8 +87,8 @@ async function loadCategoriesFromFirestore() {
                 fetchedCategories.push({ id: doc.id, ...doc.data() });
             });
             categories = fetchedCategories;
-            populateCategoryDropdowns(); // Popula os dropdowns após carregar
-            renderItems(); // Re-renderiza para aplicar filtro se já houver um
+            populateCategoryDropdowns();
+            renderItems();
         }, (error) => {
             console.error("Erro ao carregar categorias do Firestore:", error);
             showMessage("Erro", "Não foi possível carregar as categorias.");
@@ -115,7 +99,6 @@ async function loadCategoriesFromFirestore() {
     }
 }
 
-// Carrega os itens do Firestore
 async function loadItemsFromFirestore() {
     if (!db) {
         console.warn("Firestore não disponível para carregar itens.");
@@ -129,7 +112,7 @@ async function loadItemsFromFirestore() {
                 fetchedItems.push({ id: doc.id, ...doc.data() });
             });
             items = fetchedItems;
-            renderItems(); // Renderiza os itens na UI
+            renderItems();
         }, (error) => {
             console.error("Erro ao carregar itens do Firestore:", error);
             showMessage("Erro", "Não foi possível carregar os itens.");
@@ -141,9 +124,8 @@ async function loadItemsFromFirestore() {
     }
 }
 
-// Elementos do DOM
 const itemList = document.getElementById("itemList");
-const itemModal = document.getElementById("itemModal"); // Modal de detalhes
+const itemModal = document.getElementById("itemModal");
 const modalTitle = document.getElementById("modalTitle");
 const productPriceInput = document.getElementById("productPrice");
 const editProductPriceInput = document.getElementById("editProductPrice");
@@ -151,49 +133,46 @@ const modalDescription = document.getElementById("modalDescription");
 const modalGallery = document.getElementById("modalGallery");
 const authButton = document.getElementById("authButton");
 const createProductButton = document.getElementById("createProductButton");
-const createCategoryButton = document.getElementById("createCategoryButton"); // Novo botão
-const manageCategoriesButton = document.getElementById("manageCategoriesButton"); // Novo botão
+const createCategoryButton = document.getElementById("createCategoryButton");
+const manageCategoriesButton = document.getElementById("manageCategoriesButton");
 const messageModal = document.getElementById("messageModal");
 const messageModalTitle = document.getElementById("messageModalTitle");
 const messageModalText = document.getElementById("messageModalText");
 const addProductModal = document.getElementById("addProductModal");
-const addProductButton = document.getElementById('addProductButton'); // NOVA LINHA
-const addProductSpinner = document.getElementById('addProductSpinner'); // NOVA LINHA
+const addProductButton = document.getElementById('addProductButton');
+const addProductSpinner = document.getElementById('addProductSpinner');
 const editProductModal = document.getElementById("editProductModal");
 const loginModal = document.getElementById("loginModal");
-const addCategoryModal = document.getElementById("addCategoryModal"); // Novo modal de categoria
-const manageCategoriesModal = document.getElementById("manageCategoriesModal"); // Novo modal de gerir categorias
-const manageCategoryList = document.getElementById("manageCategoryList"); // Lista dentro do modal de gerir categorias
-const imageCarouselModal = document.getElementById('imageCarouselModal'); // Novo modal de carrossel
+const addCategoryModal = document.getElementById("addCategoryModal");
+const manageCategoriesModal = document.getElementById("manageCategoriesModal");
+const manageCategoryList = document.getElementById("manageCategoryList");
+const imageCarouselModal = document.getElementById('imageCarouselModal');
 const carouselImage = document.getElementById('carouselImage');
 const carouselCounter = document.getElementById('carouselCounter');
-const imageLoader = document.getElementById('imageLoader'); // NOVA LINHA
+const imageLoader = document.getElementById('imageLoader');
 const carouselProductTitle = document.getElementById('carouselProductTitle');
 const carouselProductDescription = document.getElementById('carouselProductDescription');
 const carouselProductPrice = document.getElementById('carouselProductPrice');
 const fullscreenImageModal = document.getElementById('fullscreenImageModal');
 const fullscreenImage = document.getElementById('fullscreenImage');
-const productCategorySelect = document.getElementById('productCategory'); // Select de categoria no modal de adicionar
-const editProductCategorySelect = document.getElementById('editProductCategory'); // Select de categoria no modal de editar
-const productCodeInput = document.getElementById('productCode'); // NOVO
+const productCategorySelect = document.getElementById('productCategory');
+const editProductCategorySelect = document.getElementById('editProductCategory');
+const productCodeInput = document.getElementById('productCode');
 const editProductCodeInput = document.getElementById('editProductCode');
-const categoryFilterDropdown = document.getElementById('categoryFilter'); // Select de filtro de categoria
-const confirmModal = document.getElementById('confirmModal'); // Modal de confirmação
+const categoryFilterDropdown = document.getElementById('categoryFilter');
+const confirmModal = document.getElementById('confirmModal');
 const confirmModalText = document.getElementById('confirmModalText');
 
-// Drag and drop elements for Add Product Modal
 const dropAreaAdd = document.getElementById('dropAreaAdd');
 const imageUploadAdd = document.getElementById('imageUploadAdd');
 const draggedImagesPreviewAdd = document.getElementById('draggedImagesPreviewAdd');
 
-// Drag and drop elements for Edit Product Modal
 const dropAreaEdit = document.getElementById('dropAreaEdit');
 const imageUploadEdit = document.getElementById('imageUploadEdit');
 const draggedImagesPreviewEdit = document.getElementById('draggedImagesPreviewEdit');
 
-const adminToken = ""; // Token para simular autenticação de admin (frontend)
+const adminToken = "";
 
-// Funções Globais (expostas ao window para onclick)
 window.showMessage = function (title, message) {
     messageModalTitle.textContent = title;
     messageModalText.textContent = message;
@@ -204,19 +183,18 @@ window.closeMessageModal = function () {
     messageModal.style.display = "none";
 }
 
-// Funções para o modal de confirmação
-window.showConfirmModal = function (message, itemId, type = 'product') { // Adicionado 'type' para diferenciar
+window.showConfirmModal = function (message, itemId, type = 'product') {
     confirmModalTitle.textContent = `Confirmar Exclusão de ${type === 'product' ? 'Produto' : 'Categoria'}`;
     confirmModalText.textContent = message;
-    itemToDeleteId = itemId; // Armazena o ID do item/categoria a ser excluído
-    confirmModal.dataset.deleteType = type; // Armazena o tipo de exclusão
+    itemToDeleteId = itemId;
+    confirmModal.dataset.deleteType = type;
     confirmModal.style.display = 'flex';
 }
 
 window.closeConfirmModal = function () {
     confirmModal.style.display = 'none';
-    itemToDeleteId = null; // Limpa o ID
-    confirmModal.dataset.deleteType = ''; // Limpa o tipo
+    itemToDeleteId = null;
+    confirmModal.dataset.deleteType = '';
 }
 
 window.executeConfirmedDeletion = async function () {
@@ -236,19 +214,19 @@ function updateAuthUI(isAuthenticated) {
         authButton.textContent = "Sair";
         authButton.classList.remove('login-btn');
         authButton.classList.add('logout-btn');
-        createProductButton.style.display = "block"; // Mostra o botão "Criar Novo Produto"
-        createCategoryButton.style.display = "block"; // Mostra o botão "Criar Categoria"
-        manageCategoriesButton.style.display = "block"; // Mostra o botão "Gerir Categorias"
+        createProductButton.style.display = "block";
+        createCategoryButton.style.display = "block";
+        manageCategoriesButton.style.display = "block";
     } else {
         authButton.textContent = "Login";
         authButton.classList.remove('logout-btn');
         authButton.classList.add('login-btn');
-        createProductButton.style.display = "none"; // Esconde o botão "Criar Novo Produto"
-        createCategoryButton.style.display = "none"; // Esconde o botão "Criar Categoria"
-        manageCategoriesButton.style.display = "none"; // Esconde o botão "Gerir Categorias"
-        localStorage.removeItem("adminAuthenticated"); // Garante que o estado seja limpo
+        createProductButton.style.display = "none";
+        createCategoryButton.style.display = "none";
+        manageCategoriesButton.style.display = "none";
+        localStorage.removeItem("adminAuthenticated");
     }
-    renderItems(); // Re-renderiza os itens para mostrar/esconder os botões de edição
+    renderItems();
 }
 
 window.toggleAuth = function () {
@@ -259,39 +237,34 @@ window.toggleAuth = function () {
     }
 }
 
-// Popula os dropdowns de categoria
 function populateCategoryDropdowns() {
-    // Limpa os dropdowns
     productCategorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
     editProductCategorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
     categoryFilterDropdown.innerHTML = '<option value="all">Tudo</option>';
 
-    // Ordena as categorias
     const sortedCategories = [...categories].sort((a, b) => {
         const aName = a.name.toLowerCase();
         const bName = b.name.toLowerCase();
 
         const getIphoneSortValue = (name) => {
             if (name.includes('iphone')) {
-                if (name.includes('x') && !name.includes('xr')) return 10; // iPhone X
-                if (name.includes('xr')) return 10.5; // iPhone XR
+                if (name.includes('x') && !name.includes('xr')) return 10;
+                if (name.includes('xr')) return 10.5;
                 const match = name.match(/iphone\s*(\d+)/);
-                return match ? parseInt(match[1], 10) : 9999; // Grande número para iPhones sem número claro
+                return match ? parseInt(match[1], 10) : 9999;
             }
-            return Infinity; // Não-iPhones vêm depois
+            return Infinity;
         };
 
         const aIphoneVal = getIphoneSortValue(aName);
         const bIphoneVal = getIphoneSortValue(bName);
 
-        // Se ambos são iPhones ou ambos não são iPhones, use a ordem alfabética como desempate
         if (aIphoneVal !== Infinity || bIphoneVal !== Infinity) {
             if (aIphoneVal !== bIphoneVal) {
                 return aIphoneVal - bIphoneVal;
             }
         }
 
-        // Fallback para ordenação alfabética para todos os outros casos
         return aName.localeCompare(bName);
     });
 
@@ -313,75 +286,66 @@ function populateCategoryDropdowns() {
         categoryFilterDropdown.appendChild(optionFilter);
     });
 
-    // Restaura a seleção do filtro
     categoryFilterDropdown.value = currentFilterCategory;
 }
 
-// Filtra os produtos por categoria
 window.filterProductsByCategory = function () {
     currentFilterCategory = categoryFilterDropdown.value;
     renderItems();
 }
 
-// Custom sort function for items
 function sortItemsCustom(a, b) {
     const aTitle = a.title.toLowerCase();
     const bTitle = b.title.toLowerCase();
 
     const getIphoneSortValue = (title) => {
         if (title.includes('iphone')) {
-            if (title.includes('x') && !title.includes('xr')) return 10; // iPhone X
-            if (title.includes('xr')) return 10.5; // iPhone XR
+            if (title.includes('x') && !title.includes('xr')) return 10;
+            if (title.includes('xr')) return 10.5;
             const match = title.match(/iphone\s*(\d+)/);
-            return match ? parseInt(match[1], 10) : 9999; // Grande número para iPhones sem número claro
+            return match ? parseInt(match[1], 10) : 9999;
         }
-        return Infinity; // Não-iPhones vêm depois
+        return Infinity;
     };
 
     const aIphoneVal = getIphoneSortValue(aTitle);
     const bIphoneVal = getIphoneSortValue(bTitle);
 
-    // Se ambos são iPhones ou ambos não são iPhones, use a ordem alfabética como desempate
     if (aIphoneVal !== Infinity || bIphoneVal !== Infinity) {
         if (aIphoneVal !== bIphoneVal) {
             return aIphoneVal - bIphoneVal;
         }
     }
 
-    // Fallback para ordenação alfabética para todos os outros casos
     return aTitle.localeCompare(bTitle);
 }
 
-// Custom sort function for categories in the display list
 function sortCategoriesForDisplay(a, b) {
     const aName = a.name.toLowerCase();
     const bName = b.name.toLowerCase();
 
     const getIphoneSortValue = (name) => {
         if (name.includes('iphone')) {
-            if (name.includes('x') && !name.includes('xr')) return 10; // iPhone X
-            if (name.includes('xr')) return 10.5; // iPhone XR
+            if (name.includes('x') && !name.includes('xr')) return 10;
+            if (name.includes('xr')) return 10.5;
             const match = name.match(/iphone\s*(\d+)/);
-            return match ? parseInt(match[1], 10) : 9999; // Grande número para iPhones sem número claro
+            return match ? parseInt(match[1], 10) : 9999;
         }
-        return Infinity; // Não-iPhones vêm depois
+        return Infinity;
     };
 
-    // Rule 1: 'Sem Categoria' always comes last
     if (a.id === 'no-category') return 1;
     if (b.id === 'no-category') return -1;
 
     const aIphoneVal = getIphoneSortValue(aName);
     const bIphoneVal = getIphoneSortValue(bName);
 
-    // Se ambos são iPhones ou ambos não são iPhones, use a ordem alfabética como desempate
     if (aIphoneVal !== Infinity || bIphoneVal !== Infinity) {
         if (aIphoneVal !== bIphoneVal) {
             return aIphoneVal - bIphoneVal;
         }
     }
 
-    // Fallback para ordenação alfabética para todos os outros casos
     return aName.localeCompare(bName);
 }
 
@@ -443,12 +407,11 @@ function renderItems() {
                 itemTitle.className = "item-title";
                 itemContent.appendChild(itemTitle);
 
-                // NOVO: Exibir Código do Produto
                 if (item.code && item.code.trim() !== "") {
                     const productCodeSpan = document.createElement("span");
-                    productCodeSpan.textContent = `cod:.${item.code}`; // Ex: (IP15PM-AZUL)
+                    productCodeSpan.textContent = `cod:.${item.code}`;
                     productCodeSpan.className = "product-code";
-                    itemContent.appendChild(productCodeSpan); // Adiciona código ao wrapper
+                    itemContent.appendChild(productCodeSpan);
                 }
 
                 const itemDescription = document.createElement("div");
@@ -456,11 +419,10 @@ function renderItems() {
                 itemDescription.className = "item-description";
                 itemContent.appendChild(itemDescription);
 
-                // NOVO: Exibir Preço
                 if (item.price !== undefined && item.price !== null) {
                     const itemPrice = document.createElement("div");
-                    itemPrice.textContent = `R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}`; // Formato monetário BR
-                    itemPrice.className = "item-price text-lg font-semibold text-gold-400 mt-1"; // Adicione um estilo apropriado para o preço
+                    itemPrice.textContent = `R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}`;
+                    itemPrice.className = "item-price text-lg font-semibold text-gold-400 mt-1";
                     itemContent.appendChild(itemPrice);
                 }
 
@@ -505,7 +467,7 @@ function renderItems() {
     }
 }
 
-window.openModal = function (item) { /* Este modal de detalhes não é mais chamado diretamente ao clicar no item. Pode ser removido se não for mais usado. */
+window.openModal = function (item) {
     modalTitle.textContent = item.title;
     modalDescription.textContent = item.description;
 
@@ -557,8 +519,8 @@ window.authenticateAdmin = function () {
 
 async function logout() {
     try {
-        await auth.signOut(); // Desloga do Firebase
-        localStorage.removeItem("adminAuthenticated"); // Remove o estado de admin local
+        await auth.signOut();
+        localStorage.removeItem("adminAuthenticated");
         updateAuthUI(false);
         showMessage("Sucesso", "Logout realizado com sucesso!");
     } catch (error) {
@@ -574,20 +536,20 @@ window.openAddProductModal = function () {
     document.getElementById("productTitle").value = "";
     document.getElementById("productDescription").value = "";
     document.getElementById("productImages").value = "";
-    productCategorySelect.value = ""; // Limpa a seleção da categoria
+    productCategorySelect.value = "";
 }
 
 window.closeAddProductModal = function () {
     addProductModal.style.display = "none";
     document.getElementById("productTitle").value = "";
     document.getElementById("productDescription").value = "";
-    productPriceInput.value = ""; // Limpa o campo de preço
+    productPriceInput.value = "";
     document.getElementById("productImages").value = "";
     productCategorySelect.value = "";
     productCodeInput.value = "";
     uploadedImageUrlsAdd = [];
     draggedImagesPreviewAdd.innerHTML = "";
-    uploadedImageFilesAdd = []; // Limpa os arquivos
+    uploadedImageFilesAdd = [];
 }
 
 window.openEditProductModal = function (item) {
@@ -599,29 +561,20 @@ window.openEditProductModal = function (item) {
     editProductCodeInput.value = item.code || "";
     editProductCategorySelect.value = item.categoryId || "";
 
-    // REMOVA ESTA LINHA:
-    // document.getElementById("editProductImages").value = item.images.filter(url => !url.startsWith('data:image')).join(', ');
-    // ADICIONE ESTA LINHA PARA GARANTIR QUE O CAMPO DE TEXTO FIQUE VAZIO PARA NOVAS ENTRADAS MANUAIS:
     document.getElementById("editProductImages").value = "";
 
-    // Limpa as arrays de arquivos e URLs antigas para evitar duplicação
-    uploadedImageFilesEdit = []; // Garante que a array de File's esteja vazia para novas uploads
-    uploadedImageUrlsEdit = []; // Limpa as URLs existentes antes de repopular
-    draggedImagesPreviewEdit.innerHTML = ""; // Limpa as pré-visualizações
+    uploadedImageFilesEdit = [];
+    uploadedImageUrlsEdit = [];
+    draggedImagesPreviewEdit.innerHTML = "";
 
-    // NOVO: Renderiza as imagens existentes no preview do modal de edição
     if (item.images && item.images.length > 0) {
         item.images.forEach(imageUrl => {
-            // Verifica se a URL é de uma imagem válida (não uma string vazia)
             if (imageUrl.trim() !== "") {
-                // Adiciona a URL diretamente para a array de URLs que serão salvas
-                // Apenas URLs do Firebase Storage serão gerenciadas pelos botões de remoção
                 if (imageUrl.startsWith('https://firebasestorage.googleapis.com/')) {
-                    uploadedImageUrlsEdit.push(imageUrl); // Mantém as URLs existentes na array de URLs
+                    uploadedImageUrlsEdit.push(imageUrl);
 
                     const imgPreview = document.createElement('img');
                     imgPreview.src = imageUrl;
-                    // Adicionar um botão para remover a pré-visualização e a URL
                     const imgContainer = document.createElement('div');
                     imgContainer.style.position = 'relative';
                     imgContainer.style.display = 'inline-block';
@@ -633,22 +586,13 @@ window.openEditProductModal = function (item) {
                     removeButton.onclick = () => {
                         const index = uploadedImageUrlsEdit.indexOf(imageUrl);
                         if (index > -1) {
-                            uploadedImageUrlsEdit.splice(index, 1); // Remove a URL da array
+                            uploadedImageUrlsEdit.splice(index, 1);
                         }
-                        imgContainer.remove(); // Remove a pré-visualização do DOM
+                        imgContainer.remove();
                     };
                     imgContainer.appendChild(removeButton);
 
                     draggedImagesPreviewEdit.appendChild(imgContainer);
-                } else {
-                    // Se for uma URL que não é do Firebase Storage (ex: externa),
-                    // você pode decidir como quer tratá-la.
-                    // Para esta correção, assumimos que o campo de texto é para NOVAS URLs manuais.
-                    // Se quiser que URLs externas existentes apareçam no campo de texto,
-                    // adicione-as aqui:
-                    // document.getElementById("editProductImages").value += (document.getElementById("editProductImages").value ? ", " : "") + imageUrl;
-                    // No entanto, isso pode reintroduzir o problema de duplicação se o usuário não for cuidadoso.
-                    // A abordagem mais limpa é que o campo de texto seja apenas para novas adições.
                 }
             }
         });
@@ -657,8 +601,6 @@ window.openEditProductModal = function (item) {
     editProductModal.style.display = "flex";
 }
 
-// ... (o restante do seu código, incluindo updateProduct, permanece o mesmo) ...
-
 window.closeEditProductModal = function () {
     editProductModal.style.display = "none";
     editingItemId = null;
@@ -666,12 +608,12 @@ window.closeEditProductModal = function () {
     document.getElementById("editProductTitle").value = "";
     editProductCodeInput.value = "";
     document.getElementById("editProductDescription").value = "";
-    editProductPriceInput.value = ""; // Limpa o campo de preço
+    editProductPriceInput.value = "";
     document.getElementById("editProductImages").value = "";
     editProductCategorySelect.value = "";
     uploadedImageUrlsEdit = [];
     draggedImagesPreviewEdit.innerHTML = "";
-    uploadedImageFilesAdd = []; // Limpa os arquivos
+    uploadedImageFilesAdd = [];
 }
 
 window.addProduct = async function () {
@@ -679,7 +621,7 @@ window.addProduct = async function () {
     const description = document.getElementById("productDescription").value;
     const price = parseFloat(productPriceInput.value);
     const categoryId = productCategorySelect.value;
-    const code = productCodeInput.value.trim(); // NOVO: Obter o código
+    const code = productCodeInput.value.trim();
     const textImages = document.getElementById("productImages").value.split(",").map(url => url.trim()).filter(url => url !== "");
 
     if (!title.trim()) {
@@ -687,10 +629,8 @@ window.addProduct = async function () {
         return;
     }
 
-    // --- INÍCIO: Adicionar Loader ---
-    addProductButton.disabled = true; // Desabilita o botão
-    addProductSpinner.style.display = 'inline-block'; // Mostra o spinner
-    // --- FIM: Adicionar Loader ---
+    addProductButton.disabled = true;
+    addProductSpinner.style.display = 'inline-block';
 
     try {
         const uploadedUrls = [];
@@ -723,10 +663,8 @@ window.addProduct = async function () {
         console.error("Erro ao adicionar produto:", error);
         showMessage("Erro", "Não foi possível adicionar o produto. Verifique sua conexão ou tente novamente.");
     } finally {
-        // --- INÍCIO: Remover Loader (sempre executa) ---
-        addProductButton.disabled = false; // Habilita o botão
-        addProductSpinner.style.display = 'none'; // Esconde o spinner
-        // --- FIM: Remover Loader ---
+        addProductButton.disabled = false;
+        addProductSpinner.style.display = 'none';
     }
 }
 
@@ -754,7 +692,6 @@ window.updateProduct = async function () {
         const oldImages = currentItemData ? currentItemData.images || [] : [];
 
         const uploadedUrls = [];
-        // Processar novos arquivos arrastados/selecionados
         for (const file of uploadedImageFilesEdit) {
             const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
             await uploadBytes(storageRef, file);
@@ -762,20 +699,13 @@ window.updateProduct = async function () {
             uploadedUrls.push(downloadURL);
         }
 
-        // ***** CORREÇÃO AQUI: Combinar as URLs mantidas (uploadedImageUrlsEdit), as novas carregadas (uploadedUrls) e as textuais (textImages) *****
         const finalImages = [...uploadedImageUrlsEdit, ...uploadedUrls, ...textImages];
 
-        // Lógica para remover imagens antigas que NÃO estão mais na lista final
         for (const oldUrl of oldImages) {
-            // Verifica se a imagem antiga não está na lista final E se é uma URL do Firebase Storage
             if (!finalImages.includes(oldUrl) && oldUrl.startsWith('https://firebasestorage.googleapis.com/')) {
                 try {
-                    // Extrair o caminho completo do Storage a partir da URL de download
-                    // Ex: 'https://firebasestorage.googleapis.com/v0/b/project.appspot.com/o/product_images%2Ffile.jpg?alt=media...'
-                    // Precisamos de 'product_images/file.jpg'
                     const pathStartIndex = oldUrl.indexOf('/o/') + 3;
                     const pathEndIndex = oldUrl.indexOf('?');
-                    // Decodificar a URL para lidar com espaços e caracteres especiais
                     const storagePath = decodeURIComponent(oldUrl.substring(pathStartIndex, pathEndIndex));
 
                     const imageRef = ref(storage, storagePath);
@@ -783,7 +713,6 @@ window.updateProduct = async function () {
                     console.log(`Imagem ${oldUrl} removida do Storage.`);
                 } catch (deleteError) {
                     console.warn(`Erro ao remover imagem do Storage (${oldUrl}):`, deleteError);
-                    // Não impede a atualização do documento mesmo se a imagem não puder ser deletada
                 }
             }
         }
@@ -794,7 +723,7 @@ window.updateProduct = async function () {
             description: description || "",
             price: isNaN(price) ? null : price,
             categoryId: categoryId || "",
-            images: finalImages, // Use a lista de imagens FINAL
+            images: finalImages,
             updatedAt: new Date()
         };
 
@@ -808,13 +737,11 @@ window.updateProduct = async function () {
     }
 };
 
-// Funções para o Carrossel de Imagens
 window.openImageCarouselModal = function (product) {
     currentProductInCarousel = product;
     currentCarouselImages = product.images;
     currentImageIndex = 0;
 
-    // Preencher as informações do produto
     carouselProductTitle.textContent = product.title;
     carouselProductDescription.textContent = product.description || "Sem descrição.";
     if (product.price !== undefined && product.price !== null) {
@@ -826,12 +753,10 @@ window.openImageCarouselModal = function (product) {
     updateCarouselImage();
     imageCarouselModal.style.display = 'flex';
 
-    // Adicionar event listeners de toque para swipe (já existem)
     carouselImage.addEventListener('touchstart', handleTouchStart, false);
     carouselImage.addEventListener('touchmove', handleTouchMove, false);
     carouselImage.addEventListener('touchend', handleTouchEnd, false);
 
-    // Adicionar event listener para fechar ao clicar fora do modal (já existe)
     imageCarouselModal.addEventListener('click', handleCarouselModalOutsideClick);
 };
 
@@ -842,12 +767,9 @@ window.closeImageCarouselModal = function () {
     currentImageIndex = 0;
     currentProductInCarousel = null;
 
-    // NOVO: Limpar as informações do produto ao fechar
     carouselProductTitle.textContent = "";
     carouselProductDescription.textContent = "";
     carouselProductPrice.textContent = "";
-
-    // ... (remover event listeners de toque e clique fora) ...
 };
 
 window.shareProductOnWhatsApp = function (name) {
@@ -861,32 +783,25 @@ window.shareProductOnWhatsApp = function (name) {
         ? ` por R$ ${parseFloat(currentProductInCarousel.price).toFixed(2).replace('.', ',')}`
         : "";
     const productCode = currentProductInCarousel.code && currentProductInCarousel.code.trim() !== ""
-        ? ` (Cód: ${currentProductInCarousel.code})` // NOVO: Adiciona o código se existir
+        ? ` (Cód: ${currentProductInCarousel.code})`
         : "";
 
-    // O link para o seu WhatsApp que você já tem no HTML: "https://api.whatsapp.com/send?phone=5577988343473"
-    // Pegue apenas o número de telefone da URL base
-    const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126'; // Substitua pelo seu número real (com DDI e DDD)
+    const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126';
 
-    // Mensagem a ser compartilhada (personalize!)
     let message = `Tenho interesse nesse produto: *${productName}${productCode}*${productPrice}!\n`;
-    // message += `Para mais detalhes, fale conosco via WhatsApp: `;
-    // Adicionar o link para a sua página principal, já que não temos um link direto para o produto específico.
-    // Você pode querer mudar isso para o URL real do seu catálogo se for publicado.
     const pageLink = window.location.origin + window.location.pathname;
-    message += `${pageLink}`; // Inclui o link do seu site
+    message += `${pageLink}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
 
-    // Abre o WhatsApp em uma nova aba/janela
     window.open(whatsappUrl, '_blank');
 };
 
 function updateCarouselDots() {
     const carouselDots = document.getElementById('carouselDots');
-    carouselDots.innerHTML = ''; // Limpa os dots existentes
+    carouselDots.innerHTML = '';
 
-    if (currentCarouselImages.length > 1) { // Só mostra os dots se houver mais de 1 imagem
+    if (currentCarouselImages.length > 1) {
         currentCarouselImages.forEach((_, index) => {
             const dot = document.createElement('span');
             dot.classList.add('carousel-dot');
@@ -909,10 +824,9 @@ window.openFullscreenImageModal = function (imageUrl) {
     }
 };
 
-// NOVO: Função para fechar a imagem em tela cheia
 window.closeFullscreenImageModal = function () {
     fullscreenImageModal.style.display = 'none';
-    fullscreenImage.src = ''; // Limpa a imagem ao fechar
+    fullscreenImage.src = '';
 };
 
 function updateCarouselImage() {
@@ -924,18 +838,15 @@ function updateCarouselImage() {
         carouselImage.src = imgUrl;
         carouselCounter.textContent = `${currentImageIndex + 1} / ${currentCarouselImages.length}`;
 
-        // Adiciona o evento de clique à imagem do carrossel para abrir em tela cheia
         carouselImage.onclick = () => {
             openFullscreenImageModal(imgUrl);
         };
 
-        // Evento para esconder o loader quando a imagem carregar
         carouselImage.onload = () => {
             imageLoader.style.display = 'none';
             carouselImage.classList.add('loaded');
         };
 
-        // Evento para esconder o loader se a imagem falhar
         carouselImage.onerror = () => {
             imageLoader.style.display = 'none';
             carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Imagem+Nao+Disponivel`;
@@ -946,7 +857,7 @@ function updateCarouselImage() {
         carouselImage.src = `https://placehold.co/400x300/cccccc/ffffff?text=Sem+Imagens`;
         carouselImage.classList.add('loaded');
         carouselCounter.textContent = "0 / 0";
-        carouselImage.onclick = null; // Remove o evento se não houver imagem
+        carouselImage.onclick = null;
     }
 
     updateCarouselDots();
@@ -962,13 +873,11 @@ window.prevImage = function () {
     updateCarouselImage();
 };
 
-// Lógica de Swipe para Carrossel
 function handleTouchStart(evt) {
     touchStartX = evt.touches[0].clientX;
 }
 
 function handleTouchMove(evt) {
-    // Remove a overlay de navegação por clique nas laterais do carrossel
     const carouselNavOverlay = document.querySelector('.carousel-nav-overlay');
     if (carouselNavOverlay) {
         carouselNavOverlay.style.display = 'none';
@@ -979,8 +888,7 @@ function handleTouchMove(evt) {
     let touchEndX = evt.touches[0].clientX;
     let diffX = touchStartX - touchEndX;
 
-    // Previne o scroll da página se for um swipe horizontal significativo
-    if (Math.abs(diffX) > 10) { // Um pequeno limiar para evitar scroll acidental
+    if (Math.abs(diffX) > 10) {
         evt.preventDefault();
     }
 }
@@ -991,31 +899,26 @@ function handleTouchEnd(evt) {
     }
     let touchEndX = evt.changedTouches[0].clientX;
     let diffX = touchStartX - touchEndX;
-    const swipeThreshold = 50; // Distância mínima para considerar um swipe
+    const swipeThreshold = 50;
 
     if (diffX > swipeThreshold) {
-        // Swipe para a esquerda (próxima imagem)
         nextImage();
     } else if (diffX < -swipeThreshold) {
-        // Swipe para a direita (imagem anterior)
         prevImage();
     }
-    touchStartX = 0; // Resetar para o próximo toque
+    touchStartX = 0;
 }
 
-// Função para fechar o modal do carrossel ao clicar fora
 function handleCarouselModalOutsideClick(event) {
-    // Verifica se o clique foi diretamente no fundo do modal (e não no conteúdo)
     if (event.target === imageCarouselModal) {
         closeImageCarouselModal();
     }
 }
 
 
-// Funções para o Modal de Categoria
 window.openAddCategoryModal = function () {
     addCategoryModal.style.display = "flex";
-    document.getElementById("categoryName").value = ""; // Limpa o campo
+    document.getElementById("categoryName").value = "";
 }
 
 window.closeAddCategoryModal = function () {
@@ -1040,16 +943,14 @@ window.addCategory = async function () {
     }
 }
 
-// Funções para Gerir Categorias
 window.openManageCategoriesModal = function () {
-    manageCategoryList.innerHTML = ''; // Limpa a lista antes de popular
+    manageCategoryList.innerHTML = '';
     if (categories.length === 0) {
         const li = document.createElement('li');
         li.textContent = 'Nenhuma categoria disponível.';
         li.className = 'text-center py-4 text-gray-400';
         manageCategoryList.appendChild(li);
     } else {
-        // Reutiliza a lógica de ordenação de categorias para exibição
         const sortedCategories = [...categories].sort((a, b) => {
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
@@ -1090,46 +991,42 @@ window.closeManageCategoriesModal = function () {
     manageCategoriesModal.style.display = 'none';
 }
 
-// Função para remover um produto e suas imagens do Storage
 window.deleteProduct = async function (itemId) {
     if (!db) {
         console.warn("Firestore não disponível para remover item.");
         showMessage("Erro", "Serviço de base de dados não disponível.");
         return;
     }
-    if (!storage) { // Verifique se o storage está inicializado
+    if (!storage) {
         console.warn("Firebase Storage não disponível para remover imagens.");
         showMessage("Aviso", "As imagens podem não ser removidas do Storage.");
-        // continue, mas avise o usuário
     }
 
     try {
         const itemDocRef = doc(db, `artifacts/${appId}/public/data/items`, itemId);
 
-        // 1. Obter os dados do produto ANTES de deletá-lo do Firestore
-        const itemSnapshot = await getDoc(itemDocRef); // Importar getDoc do Firestore
+        const itemSnapshot = await getDoc(itemDocRef);
         if (itemSnapshot.exists()) {
             const itemData = itemSnapshot.data();
             const imagesToDelete = itemData.images || [];
 
-            // 2. Iterar sobre as imagens e deletar do Storage
             for (const imageUrl of imagesToDelete) {
-                // Verifique se é uma URL do Firebase Storage para evitar deletar URLs externas
                 if (imageUrl.startsWith('https://firebasestorage.googleapis.com/')) {
                     try {
-                        const imageRef = ref(storage, imageUrl);
+                        const pathStartIndex = imageUrl.indexOf('/o/') + 3;
+                        const pathEndIndex = imageUrl.indexOf('?');
+                        const storagePath = decodeURIComponent(imageUrl.substring(pathStartIndex, pathEndIndex));
+
+                        const imageRef = ref(storage, storagePath);
                         await deleteObject(imageRef);
                         console.log(`Imagem ${imageUrl} removida do Storage.`);
                     } catch (storageError) {
                         console.warn(`Erro ao remover imagem do Storage (${imageUrl}):`, storageError);
-                        // Você pode adicionar mais tratamento de erro aqui,
-                        // mas não queremos que um erro de deleção de imagem impeça a deleção do documento.
                     }
                 }
             }
         }
 
-        // 3. Deletar o documento do Firestore
         await deleteDoc(itemDocRef);
         showMessage("Sucesso", "Produto e imagens associadas removidos com sucesso!");
     } catch (error) {
@@ -1138,7 +1035,6 @@ window.deleteProduct = async function (itemId) {
     }
 };
 
-// Função para remover uma categoria (MOVIDA PARA CÁ E TORNADA GLOBAL)
 window.deleteCategory = async function (categoryId) {
     if (!db) {
         console.warn("Firestore não disponível para remover categoria.");
@@ -1153,12 +1049,9 @@ window.deleteCategory = async function (categoryId) {
         console.error("Erro ao remover categoria:", error);
         showMessage("Erro", "Não foi possível remover a categoria. Tente novamente.");
     }
-}; // Note o ; aqui
+};
 
-// Lógica de Drag and Drop para Adicionar Produto
-// Lógica de Drag and Drop para Adicionar Produto
 dropAreaAdd.addEventListener('click', () => imageUploadAdd.click());
-// Mude 'uploadedImageUrlsAdd' para 'uploadedImageFilesAdd'
 imageUploadAdd.addEventListener('change', (e) => handleFiles(e.target.files, uploadedImageFilesAdd, draggedImagesPreviewAdd));
 
 dropAreaAdd.addEventListener('dragover', (e) => {
@@ -1179,13 +1072,10 @@ dropAreaAdd.addEventListener('drop', (e) => {
     dropAreaAdd.classList.remove('highlight');
     let dt = e.dataTransfer;
     let files = dt.files;
-    // Mude 'uploadedImageUrlsAdd' para 'uploadedImageFilesAdd'
     handleFiles(files, uploadedImageFilesAdd, draggedImagesPreviewAdd);
 });
 
-// Lógica de Drag and Drop para Editar Produto
 dropAreaEdit.addEventListener('click', () => imageUploadEdit.click());
-// Mude 'uploadedImageUrlsEdit' para 'uploadedImageFilesEdit'
 imageUploadEdit.addEventListener('change', (e) => handleFiles(e.target.files, uploadedImageFilesEdit, draggedImagesPreviewEdit));
 
 dropAreaEdit.addEventListener('dragover', (e) => {
@@ -1206,7 +1096,6 @@ dropAreaEdit.addEventListener('drop', (e) => {
     dropAreaEdit.classList.remove('highlight');
     let dt = e.dataTransfer;
     let files = dt.files;
-    // Mude 'uploadedImageUrlsEdit' para 'uploadedImageFilesEdit'
     handleFiles(files, uploadedImageFilesEdit, draggedImagesPreviewEdit);
 });
 
@@ -1217,16 +1106,13 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
             continue;
         }
 
-        // Armazena o objeto File diretamente na array
         targetFilesArray.push(file);
 
-        // Cria a pré-visualização usando FileReader (Base64 temporário para exibição)
         const reader = new FileReader();
         reader.onload = (e) => {
             const imageUrl = e.target.result;
             const imgPreview = document.createElement('img');
             imgPreview.src = imageUrl;
-            // Opcional: Adicionar um botão para remover a pré-visualização e o arquivo
             const imgContainer = document.createElement('div');
             imgContainer.style.position = 'relative';
             imgContainer.style.display = 'inline-block';
@@ -1238,9 +1124,9 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
             removeButton.onclick = () => {
                 const index = targetFilesArray.indexOf(file);
                 if (index > -1) {
-                    targetFilesArray.splice(index, 1); // Remove o arquivo da array
+                    targetFilesArray.splice(index, 1);
                 }
-                imgContainer.remove(); // Remove a pré-visualização do DOM
+                imgContainer.remove();
             };
             imgContainer.appendChild(removeButton);
 
@@ -1250,5 +1136,4 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
     }
 }
 
-// Inicializa o Firebase e carrega os itens ao carregar a página
 window.onload = initializeFirebase;

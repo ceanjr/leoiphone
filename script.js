@@ -191,19 +191,6 @@ const draggedImagesPreviewEdit = document.getElementById('draggedImagesPreviewEd
 
 const adminToken = "050990"; // Token para simular autenticação de admin (frontend)
 
-const allModals = [
-    itemModal,         // Modal de detalhes (se ainda estiver em uso)
-    loginModal,
-    messageModal,
-    confirmModal,
-    addProductModal,
-    editProductModal,
-    addCategoryModal,
-    manageCategoriesModal,
-    imageCarouselModal,
-    fullscreenImageModal // O novo modal de tela cheia
-];
-
 // Funções Globais (expostas ao window para onclick)
 window.showMessage = function (title, message) {
     messageModalTitle.textContent = title;
@@ -1207,58 +1194,6 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
         reader.readAsDataURL(file);
     }
 }
-
-// --- LÓGICA GLOBAL PARA FECHAR MODAIS AO CLICAR FORA ---
-document.addEventListener('click', function(event) {
-    // Itera sobre todos os modais definidos
-    allModals.forEach(modal => {
-        // Verifica se o modal está visível
-        if (modal.style.display === 'flex') {
-            const modalContent = modal.querySelector('.modal-content, .modal-content-fullscreen'); // Pega o conteúdo do modal
-            
-            // Verifica se o clique não foi dentro do conteúdo do modal
-            // E garante que não estamos clicando nos botões de fechar ou nos botões de navegação do carrossel
-            if (modalContent && !modalContent.contains(event.target) && !event.target.closest('.close') && !event.target.closest('.close-fullscreen') && !event.target.closest('.carousel-buttons')) {
-                // Chama a função de fechar específica para cada modal
-                // Usamos um switch ou if/else if para lidar com as diferentes funções de fechamento
-                switch (modal.id) {
-                    case 'itemModal':
-                        closeModal();
-                        break;
-                    case 'loginModal':
-                        closeLoginModal();
-                        break;
-                    case 'messageModal':
-                        closeMessageModal();
-                        break;
-                    case 'confirmModal':
-                        closeConfirmModal();
-                        break;
-                    case 'addProductModal':
-                        closeAddProductModal();
-                        break;
-                    case 'editProductModal':
-                        closeEditProductModal();
-                        break;
-                    case 'addCategoryModal':
-                        closeAddCategoryModal();
-                        break;
-                    case 'manageCategoriesModal':
-                        closeManageCategoriesModal();
-                        break;
-                    case 'imageCarouselModal':
-                        // O carrossel já tem sua própria lógica, mas mantemos aqui por consistência
-                        closeImageCarouselModal();
-                        break;
-                    case 'fullscreenImageModal':
-                        closeFullscreenImageModal();
-                        break;
-                    // Adicione mais casos se tiver outros modais
-                }
-            }
-        }
-    });
-});
 
 // Inicializa o Firebase e carrega os itens ao carregar a página
 window.onload = initializeFirebase;

@@ -793,23 +793,29 @@ window.updateProduct = async function () {
 
 // Funções para o Carrossel de Imagens
 window.openImageCarouselModal = function (product) {
-    currentProductInCarousel = product; 
+    currentProductInCarousel = product;
     currentCarouselImages = product.images;
-    currentImageIndex = 0; 
+    currentImageIndex = 0;
 
-    // NOVO: Preencher as informações do produto
+    // Preencher as informações do produto
     carouselProductTitle.textContent = product.title;
-    carouselProductDescription.textContent = product.description || "Sem descrição."; // Fallback para descrição vazia
+    carouselProductDescription.textContent = product.description || "Sem descrição.";
     if (product.price !== undefined && product.price !== null) {
         carouselProductPrice.textContent = `R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}`;
     } else {
         carouselProductPrice.textContent = "Preço não disponível";
     }
 
-    updateCarouselImage(); // Já chama a função que atualiza a imagem e o contador
+    updateCarouselImage();
     imageCarouselModal.style.display = 'flex';
 
-    // ... (event listeners de toque e clique fora) ...
+    // Adicionar event listeners de toque para swipe (já existem)
+    carouselImage.addEventListener('touchstart', handleTouchStart, false);
+    carouselImage.addEventListener('touchmove', handleTouchMove, false);
+    carouselImage.addEventListener('touchend', handleTouchEnd, false);
+
+    // Adicionar event listener para fechar ao clicar fora do modal (já existe)
+    imageCarouselModal.addEventListener('click', handleCarouselModalOutsideClick);
 };
 
 window.closeImageCarouselModal = function () {
@@ -825,6 +831,35 @@ window.closeImageCarouselModal = function () {
     carouselProductPrice.textContent = "";
 
     // ... (remover event listeners de toque e clique fora) ...
+};
+
+window.shareProductOnWhatsApp = function (name) {
+    if (!currentProductInCarousel) {
+        showMessage("Erro", "Nenhum produto selecionado para compartilhar.");
+        return;
+    }
+
+    const productName = currentProductInCarousel.title;
+    const productPrice = currentProductInCarousel.price !== undefined && currentProductInCarousel.price !== null
+        ? ` por R$ ${parseFloat(currentProductInCarousel.price).toFixed(2).replace('.', ',')}`
+        : "";
+    
+    // O link para o seu WhatsApp que você já tem no HTML: "https://api.whatsapp.com/send?phone=5577988343473"
+    // Pegue apenas o número de telefone da URL base
+    const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126'; // Substitua pelo seu número real (com DDI e DDD)
+
+    // Mensagem a ser compartilhada (personalize!)
+    let message = `Tenho interesse nesse produto: *${productName}*${productPrice}!\n`;
+    // message += `Para mais detalhes, fale conosco via WhatsApp: `;
+    // Adicionar o link para a sua página principal, já que não temos um link direto para o produto específico.
+    // Você pode querer mudar isso para o URL real do seu catálogo se for publicado.
+    const pageLink = window.location.origin + window.location.pathname;
+    message += `${pageLink}`; // Inclui o link do seu site
+
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+
+    // Abre o WhatsApp em uma nova aba/janela
+    window.open(whatsappUrl, '_blank');
 };
 
 function updateCarouselDots() {

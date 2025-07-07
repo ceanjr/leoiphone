@@ -445,7 +445,69 @@ body {
     font-size: 1.3em;
     font-weight: bold;
     color: var(--color-gold); /* Cor dourada para o preço */
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+}
+
+.carousel-share-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os botões quebrem linha em telas pequenas */
+    justify-content: center;
+    gap: 10px; /* Espaçamento entre os botões */
+    margin-top: 20px;
+    width: 100%;
+    padding: 0 20px; /* Adiciona padding para alinhar com o conteúdo */
+    box-sizing: border-box; /* Garante que padding não estoure a largura */
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex: 1 1 auto; /* Permite que os botões cresçam e encolham */
+    min-width: 180px; /* Largura mínima para botões em linha */
+    max-width: 250px; /* Largura máxima para botões */
+    opacity: 0.9;
+}
+
+.share-icon {
+    width: 20px; /* Tamanho do ícone */
+    height: 20px;
+    margin-right: 8px;
+}
+
+.whatsapp-share-btn {
+    background-color: #25D366; /* Cor do WhatsApp */
+    color: white;
+}
+
+.whatsapp-share-btn:hover {
+    background-color: #1DA851;
+    transform: translateY(-2px);
+}
+
+.copy-link-btn {
+    background-color: var(--color-gold); /* Sua cor dourada */
+    color: var(--color-text-on-light);
+}
+
+.copy-link-btn:hover {
+    background-color: var(--color-light-gold);
+    transform: translateY(-2px);
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 480px) {
+    .share-btn {
+        width: 100%; /* Cada botão ocupa a largura total em telas muito pequenas */
+        max-width: none;
+    }
 }
 
 .fullscreen-image-modal {

@@ -239,7 +239,6 @@
         </div>
     </div>
 
-    <!-- Novo Modal para Carrossel de Imagens -->
 <div class="modal image-carousel-modal" id="imageCarouselModal">
     <div class="modal-content">
         <button class="close" onclick="closeImageCarouselModal()">&times;</button>
@@ -247,16 +246,26 @@
             <img id="carouselImage" src="" alt="Imagem do Carrossel">
             <div id="imageLoader" class="image-loader" style="display: none;"></div>
             <div class="carousel-counter" id="carouselCounter"></div>
+            <div class="carousel-dots" id="carouselDots"></div>
             <div class="carousel-buttons">
-                <button onclick="prevImage()">&#10094;</button> 
-                <button onclick="nextImage()">&#10095;</button> 
+                <button onclick="prevImage()">&#10094;</button>
+                <button onclick="nextImage()">&#10095;</button>
             </div>
         </div>
-        <div class="carousel-info"> <h3 id="carouselProductTitle" class="carousel-product-title"></h3>
+        <div class="carousel-info">
+            <h3 id="carouselProductTitle" class="carousel-product-title"></h3>
             <p id="carouselProductDescription" class="carousel-product-description"></p>
             <p id="carouselProductPrice" class="carousel-product-price"></p>
         </div>
-        <div class="carousel-dots" id="carouselDots"></div> 
+
+        <div class="carousel-share-buttons">
+            <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('leo')">
+                <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong>Léo</strong>
+            </button>
+                        <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('junior')">
+                <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"> Enviar para &nbsp<strong> Júnior</strong>
+            </button>
+        </div>
     </div>
 </div>
 

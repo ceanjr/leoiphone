@@ -2,7 +2,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyDrw18otUXUzzKPR2Q_jxAE2NqrvL4gj9I",
     authDomain: "leo-iphone-5c9a0.firebaseapp.com",
     projectId: "leo-iphone-5c9a0",
-    storageBucket: "leo-iphone-5c9a0.firebasestorage.app",
+    storageBucket: "leo-iphone-5c9a0",
     messagingSenderId: "484759088723",
     appId: "1:484759088723:web:7059fea6ebb48f1dcde0a6"
 };

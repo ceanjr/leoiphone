@@ -302,29 +302,40 @@ window.filterProductsByName = function () {
 }
 
 function sortItemsCustom(a, b) {
-    const aTitle = a.title.toLowerCase();
-    const bTitle = b.title.toLowerCase();
-
-    const getIphoneSortValue = (title) => {
-        if (title.includes('iphone')) {
-            if (title.includes('x') && !title.includes('xr')) return 10;
-            if (title.includes('xr')) return 10.5;
-            const match = title.match(/iphone\s*(\d+)/);
-            return match ? parseInt(match[1], 10) : 9999;
-        }
-        return Infinity;
+    // 1. Prioridade: Modelos de iPhone (Standard, Pro, Pro Max)
+    const getModelOrder = (title) => {
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes('pro max')) return 3;
+        if (lowerTitle.includes('pro')) return 2;
+        if (lowerTitle.includes('iphone')) return 1; // Genérico para modelos standard
+        return 0; // Para outros produtos que não são iPhone, ou que não se encaixam nos critérios acima
     };
 
-    const aIphoneVal = getIphoneSortValue(aTitle);
-    const bIphoneVal = getIphoneSortValue(bTitle);
+    const orderA = getModelOrder(a.title);
+    const orderB = getModelOrder(b.title);
 
-    if (aIphoneVal !== Infinity || bIphoneVal !== Infinity) {
-        if (aIphoneVal !== bIphoneVal) {
-            return aIphoneVal - bIphoneVal;
+    // Se ambos são iPhones e têm uma ordem de modelo definida
+    if (orderA !== 0 && orderB !== 0) {
+        if (orderA !== orderB) {
+            return orderA - orderB; // Ordena por tipo de modelo (Standard, Pro, Pro Max)
+        }
+
+        // Se os modelos são os mesmos (ex: ambos são "Pro"), então ordena por GB
+        const getStorageGB = (title) => {
+            const match = title.match(/(\d+)\s*gb/i); // Encontra números seguidos por "GB"
+            return match ? parseInt(match[1]) : 0; // Retorna o número de GBs, ou 0 se não encontrar
+        };
+
+        const gbA = getStorageGB(a.title);
+        const gbB = getStorageGB(b.title);
+
+        if (gbA !== gbB) {
+            return gbA - gbB; // Ordena por GB em ordem crescente
         }
     }
 
-    return aTitle.localeCompare(bTitle);
+    // 2. Se não são iPhones, ou se os critérios acima não se aplicam, ordena alfabeticamente pelo título
+    return a.title.localeCompare(b.title);
 }
 
 function sortCategoriesForDisplay(a, b) {

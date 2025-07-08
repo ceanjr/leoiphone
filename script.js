@@ -1,3 +1,21 @@
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('produto');
+
+    if (productId) {
+        // Espera os dados carregarem e depois abre o modal
+        const checkReady = setInterval(() => {
+            if (items.length > 0) {
+                const product = items.find(p => p.id === productId);
+                if (product) {
+                    openImageCarouselModal(product);
+                }
+                clearInterval(checkReady);
+            }
+        }, 300);
+    }
+});
+
 const firebaseConfig = {
     apiKey: "AIzaSyDrw18otUXUzzKPR2Q_jxAE2NqrvL4gj9I",
     authDomain: "leo-iphone-5c9a0.firebaseapp.com",
@@ -397,7 +415,7 @@ function renderItems() {
         }
     });
 
- let sortedCategoryGroups = Object.keys(itemsByCategory)
+    let sortedCategoryGroups = Object.keys(itemsByCategory)
         .map(categoryId => ({ id: categoryId, name: itemsByCategory[categoryId].name, items: itemsByCategory[categoryId].items }))
         .filter(group => group.items.length > 0);
 
@@ -863,7 +881,7 @@ window.shareProductOnWhatsApp = function (name) {
     const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126';
 
     let message = `Tenho interesse nesse produto: *${productName}${productCode}*${productPrice}!\n`;
-    const pageLink = window.location.origin + window.location.pathname;
+    const pageLink = `${window.location.origin}${window.location.pathname}?produto=${currentProductInCarousel.id}`;
     message += `${pageLink}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;

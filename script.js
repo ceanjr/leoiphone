@@ -491,6 +491,52 @@ function renderItems() {
     }
 }
 
+function makeImagePreviewSortable(containerId, imageListRef) {
+    const container = document.getElementById(containerId);
+
+    let draggedElement = null;
+
+    container.addEventListener('dragstart', function (e) {
+        if (e.target.tagName === 'IMG') {
+            draggedElement = e.target;
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    container.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    });
+
+    container.addEventListener('drop', function (e) {
+        e.preventDefault();
+        if (e.target.tagName === 'IMG' && draggedElement && draggedElement !== e.target) {
+            const draggedIndex = Array.from(container.children).indexOf(draggedElement.parentNode);
+            const targetIndex = Array.from(container.children).indexOf(e.target.parentNode);
+
+            if (draggedIndex > -1 && targetIndex > -1) {
+                // Move visualmente no DOM
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedElement.parentNode, e.target.parentNode.nextSibling);
+                } else {
+                    container.insertBefore(draggedElement.parentNode, e.target.parentNode);
+                }
+
+                // Reordenar a lista real das URLs
+                const updatedList = [];
+                Array.from(container.children).forEach(imgWrapper => {
+                    const img = imgWrapper.querySelector('img');
+                    if (img) updatedList.push(img.src);
+                });
+                imageListRef.length = 0;
+                imageListRef.push(...updatedList);
+            }
+
+            draggedElement = null;
+        }
+    });
+}
+
 window.openModal = function (item) {
     modalTitle.textContent = item.title;
     modalDescription.textContent = item.description;
@@ -561,6 +607,8 @@ window.openAddProductModal = function () {
     document.getElementById("productDescription").value = "";
     document.getElementById("productImages").value = "";
     productCategorySelect.value = "";
+    makeImagePreviewSortable("draggedImagesPreviewAdd", uploadedImageUrlsAdd);
+
 }
 
 window.closeAddProductModal = function () {
@@ -584,6 +632,7 @@ window.openEditProductModal = function (item) {
     editProductPriceInput.value = item.price || "";
     editProductCodeInput.value = item.code || "";
     editProductCategorySelect.value = item.categoryId || "";
+    makeImagePreviewSortable("draggedImagesPreviewEdit", uploadedImageUrlsEdit);
 
     document.getElementById("editProductImages").value = "";
 
@@ -599,6 +648,7 @@ window.openEditProductModal = function (item) {
 
                     const imgPreview = document.createElement('img');
                     imgPreview.src = imageUrl;
+                    imgPreview.draggable = true;
                     const imgContainer = document.createElement('div');
                     imgContainer.style.position = 'relative';
                     imgContainer.style.display = 'inline-block';

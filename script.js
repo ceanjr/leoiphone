@@ -40,7 +40,7 @@ console.log("App ID em uso (Local):", appId);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
 let app;
 let db;
@@ -513,6 +513,26 @@ function renderItems() {
     }
 }
 
+function createProgressBar(fileName) {
+    const container = document.createElement('div');
+    container.className = 'upload-progress-bar';
+
+    const label = document.createElement('span');
+    label.textContent = fileName;
+    label.className = 'upload-label';
+
+    const bar = document.createElement('div');
+    bar.className = 'upload-bar';
+
+    const fill = document.createElement('div');
+    fill.className = 'upload-fill';
+    bar.appendChild(fill);
+
+    container.appendChild(label);
+    container.appendChild(bar);
+    return { container, fill };
+}
+
 function makeImagePreviewSortable(containerId, imageListRef) {
     const container = document.getElementById(containerId);
 
@@ -730,11 +750,33 @@ window.addProduct = async function () {
 
     try {
         const uploadedUrls = [];
+        const progressContainer = document.createElement('div');
+        addProductModal.querySelector('.modal-body').appendChild(progressContainer);
+
         for (const file of uploadedImageFilesAdd) {
             const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            uploadedUrls.push(downloadURL);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const { container, fill } = createProgressBar(file.name);
+            progressContainer.appendChild(container);
+
+            await new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        fill.style.width = `${progress}%`;
+                    },
+                    (error) => {
+                        console.error("Erro no upload:", error);
+                        reject(error);
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        uploadedUrls.push(downloadURL);
+                        resolve();
+                    }
+                );
+            });
         }
 
         const combinedImages = [...uploadedUrls, ...textImages];
@@ -788,12 +830,34 @@ window.updateProduct = async function () {
         const oldImages = currentItemData ? currentItemData.images || [] : [];
 
         const uploadedUrls = [];
-        for (const file of uploadedImageFilesEdit) {
-            const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            uploadedUrls.push(downloadURL);
-        }
+const progressContainer = document.createElement('div');
+addProductModal.querySelector('.modal-body').appendChild(progressContainer);
+
+for (const file of uploadedImageFilesAdd) {
+    const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    const { container, fill } = createProgressBar(file.name);
+    progressContainer.appendChild(container);
+
+    await new Promise((resolve, reject) => {
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                fill.style.width = `${progress}%`;
+            },
+            (error) => {
+                console.error("Erro no upload:", error);
+                reject(error);
+            },
+            async () => {
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                uploadedUrls.push(downloadURL);
+                resolve();
+            }
+        );
+    });
+}
 
         const finalImages = [...uploadedImageUrlsEdit, ...uploadedUrls, ...textImages];
 

@@ -98,6 +98,7 @@ body {
 .item-content {
     flex-grow: 1;
     padding-right: 10px;
+    ;
 }
 
 .product-code {
@@ -108,13 +109,16 @@ body {
     display: inline;
     text-align: center;
     vertical-align: middle;
+    position: absolute;
+    right: 0;
+    top: -6px;
 }
 
 .item-title {
     font-size: 1.1em;
     font-weight: 500;
     color: var(--color-text-on-dark);
-        display: inline-block;
+    display: inline-block;
     vertical-align: bottom;
 }
 
@@ -134,6 +138,12 @@ body {
 @media (min-width: 640px) {
     .item-actions {
         margin-top: 0;
+    }
+}
+
+@media (max-width: 375px) {
+    .item-title {
+        font-size: 0.9rem;
     }
 }
 
@@ -636,13 +646,16 @@ body {
         max-height: 90vh;
         overflow-y: auto;
     }
+
     .carousel-product-title {
         font-size: 1.5em;
     }
+
     .carousel-product-description {
         font-size: 0.9em;
         max-height: 60px;
     }
+
     .carousel-product-price {
         font-size: 1.1em;
     }
@@ -934,8 +947,13 @@ h1 {
 }
 
 @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 .spinner {

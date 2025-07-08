@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/produto/:slug", "destination": "/" }
+    { "source": "/produto/:slug", "destination": "/index.html" },
+    { "source": "/script.js", "destination": "/script.js" },
+    { "source": "/style.css", "destination": "/style.css" },
+    { "source": "/img/(.*)", "destination": "/img/$1" }
   ]
 }

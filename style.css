@@ -49,6 +49,33 @@ body {
     margin-bottom: 64px;
 }
 
+.product-search-bar {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.product-search-bar label {
+    color: var(--color-text-on-dark);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.product-search-bar input {
+    background-color: var(--color-dark-background);
+    color: var(--color-text-on-dark);
+    border: 1px solid var(--color-border-dark);
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.product-search-bar input:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
 .item {
     cursor: pointer;
     padding: 10px;

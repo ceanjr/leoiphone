@@ -48,12 +48,18 @@
             <label for="categoryFilter">Filtrar por Categoria:</label>
             <select id="categoryFilter" onchange="filterProductsByCategory()">
                 <option value="all">Tudo</option>
-                
+
             </select>
         </div>
 
+        <div class="product-search-bar">
+            <label for="productSearch">Buscar Produtos:</label>
+            <input type="text" id="productSearch" placeholder="Digite o nome do produto..."
+                onkeyup="filterProductsByName()" class="focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
         <ul id="itemList" class="list-none p-0">
-            
+
         </ul>
     </div>
 
@@ -66,7 +72,7 @@
             <div class="modal-body">
                 <p id="modalDescription"></p>
                 <div class="photo-gallery" id="modalGallery">
-                    
+
                 </div>
             </div>
         </div>
@@ -144,7 +150,7 @@
                 <label for="productCategory">Categoria</label>
                 <select id="productCategory" class="focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Selecione uma categoria</option>
-                    
+
                 </select>
 
                 <label for="productImages">URLs das Imagens (separadas por vírgula)</label>
@@ -191,7 +197,7 @@
                 <label for="editProductCategory">Categoria</label>
                 <select id="editProductCategory" class="focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Selecione uma categoria</option>
-                    
+
                 </select>
 
                 <label for="editProductImages">URLs das Imagens (separadas por vírgula)</label>
@@ -232,7 +238,7 @@
             </div>
             <div class="modal-body">
                 <ul id="manageCategoryList" class="list-none p-0">
-                    
+
                 </ul>
             </div>
         </div>

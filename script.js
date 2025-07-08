@@ -32,6 +32,7 @@ let uploadedImageUrlsEdit = [];
 let editingItemId = null;
 let itemToDeleteId = null;
 let currentFilterCategory = 'all';
+let currentSearchTerm = '';
 let uploadedImageFilesAdd = [];
 let uploadedImageFilesEdit = [];
 
@@ -160,6 +161,7 @@ const editProductCategorySelect = document.getElementById('editProductCategory')
 const productCodeInput = document.getElementById('productCode');
 const editProductCodeInput = document.getElementById('editProductCode');
 const categoryFilterDropdown = document.getElementById('categoryFilter');
+const productSearchInput = document.getElementById('productSearch');
 const confirmModal = document.getElementById('confirmModal');
 const confirmModalText = document.getElementById('confirmModalText');
 
@@ -294,6 +296,11 @@ window.filterProductsByCategory = function () {
     renderItems();
 }
 
+window.filterProductsByName = function () {
+    currentSearchTerm = productSearchInput.value.toLowerCase().trim(); // Pega o valor e o normaliza
+    renderItems(); // Re-renderiza para aplicar o filtro de busca
+}
+
 function sortItemsCustom(a, b) {
     const aTitle = a.title.toLowerCase();
     const bTitle = b.title.toLowerCase();
@@ -351,13 +358,19 @@ function sortCategoriesForDisplay(a, b) {
 
 function renderItems() {
     itemList.innerHTML = "";
-    let filteredItems = items;
+    let filteredAndSearchedItems = items;
 
     if (currentFilterCategory !== 'all') {
-        filteredItems = items.filter(item => item.categoryId === currentFilterCategory);
+        filteredAndSearchedItems = filteredAndSearchedItems.filter(item => item.categoryId === currentFilterCategory);
     }
 
-    filteredItems.sort(sortItemsCustom);
+    if (currentSearchTerm) {
+        filteredAndSearchedItems = filteredAndSearchedItems.filter(item =>
+            item.title.toLowerCase().includes(currentSearchTerm)
+        );
+    }
+
+    filteredAndSearchedItems.sort(sortItemsCustom);
 
     const itemsByCategory = {};
     categories.forEach(cat => {
@@ -365,7 +378,7 @@ function renderItems() {
     });
     itemsByCategory['no-category'] = { name: 'Sem Categoria', items: [] };
 
-    filteredItems.forEach(item => {
+    filteredAndSearchedItems.forEach(item => { // Usa os itens já filtrados
         if (item.categoryId && itemsByCategory[item.categoryId]) {
             itemsByCategory[item.categoryId].items.push(item);
         } else {
@@ -373,7 +386,7 @@ function renderItems() {
         }
     });
 
-    let sortedCategoryGroups = Object.keys(itemsByCategory)
+ let sortedCategoryGroups = Object.keys(itemsByCategory)
         .map(categoryId => ({ id: categoryId, name: itemsByCategory[categoryId].name, items: itemsByCategory[categoryId].items }))
         .filter(group => group.items.length > 0);
 

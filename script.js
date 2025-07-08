@@ -1,20 +1,24 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('produto');
+    const pathParts = window.location.pathname.split('/');
+    if (pathParts[1] === "produto" && pathParts[2]) {
+        const slugFromUrl = pathParts[2];
 
-    if (productId) {
-        // Espera os dados carregarem e depois abre o modal
         const checkReady = setInterval(() => {
             if (items.length > 0) {
-                const product = items.find(p => p.id === productId);
-                if (product) {
-                    openImageCarouselModal(product);
+                const found = items.find(item => {
+                    const slug = slugify(`${item.title} ${item.code || ""}`);
+                    return slug === slugFromUrl;
+                });
+
+                if (found) {
+                    openImageCarouselModal(found);
                 }
                 clearInterval(checkReady);
             }
         }, 300);
     }
 });
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDrw18otUXUzzKPR2Q_jxAE2NqrvL4gj9I",
@@ -864,6 +868,15 @@ window.closeImageCarouselModal = function () {
     carouselProductPrice.textContent = "";
 };
 
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .normalize("NFD") // remove acentos
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "");
+}
+
 window.shareProductOnWhatsApp = function (name) {
     if (!currentProductInCarousel) {
         showMessage("Erro", "Nenhum produto selecionado para compartilhar.");
@@ -881,7 +894,9 @@ window.shareProductOnWhatsApp = function (name) {
     const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126';
 
     let message = `Tenho interesse nesse produto: *${productName}${productCode}*${productPrice}!\n`;
-    const pageLink = `${window.location.origin}${window.location.pathname}?produto=${currentProductInCarousel.id}`;
+    const slug = slugify(`${currentProductInCarousel.title} ${currentProductInCarousel.code || ""}`);
+    const pageLink = `${window.location.origin}/produto/${slug}`;
+
     message += `${pageLink}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;

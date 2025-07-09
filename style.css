@@ -18,6 +18,40 @@ body {
     color: var(--color-text-on-dark);
 }
 
+.top-bar {
+   width: 100%;
+   max-width: 800px; /* Alinhe com a largura máxima do seu container principal */
+   display: flex;
+   justify-content: space-between; /* Coloca o primeiro item à esquerda e o último à direita */
+   align-items: center;
+   padding: 0 20px; /* Adicione padding horizontal para não grudar nas bordas */
+   box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+   /* Remova qualquer position: absolute ou fixed se não quiser que ela flutue */
+}
+
+/* Novo estilo para agrupar os botões de administração e login */
+.admin-auth-group {
+    display: flex;
+    gap: 10px; /* Espaço entre os botões */
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
+    justify-content: flex-end; /* Garante que fiquem alinhados à direita dentro do grupo */
+    align-items: center;
+}
+
+/* Remova a classe .auth-buttons antiga, pois ela não é mais necessária para o posicionamento global */
+/* .auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: flex-end;
+    max-width: 800px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+    box-sizing: border-box;
+} */
+
+
 .header-logo {
     margin-bottom: 20px;
     text-align: center;
@@ -189,6 +223,23 @@ body {
     z-index: 1000;
 }
 
+/* Specific styling for the favorites modal */
+.modal#favoritesModal {
+    justify-content: flex-end;
+    /* Align to the right for slide-in */
+    transform: translateX(100%);
+    /* Start off-screen to the right */
+    transition: transform 0.3s ease-out;
+    /* Smooth transition for slide */
+}
+
+.modal#favoritesModal.is-active {
+    /* Class to be added by JS when opening */
+    transform: translateX(0);
+    /* Slide into view */
+}
+
+
 .modal-content {
     background-color: var(--color-light-background);
     padding: 20px;
@@ -201,13 +252,26 @@ body {
     color: var(--color-text-on-dark);
 }
 
+/* Specific content styling for favorites modal */
+.modal#favoritesModal .modal-content {
+    height: 100%;
+    /* Take full height on mobile-like view */
+    max-width: 100%;
+    /* Take full width on mobile-like view */
+    border-radius: 0;
+    /* No border-radius for full screen */
+    margin-left: auto;
+    /* Push content to the right */
+    box-sizing: border-box;
+    /* Ensure padding is included in width/height */
+    border: none;
+}
+
+
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--color-border-dark);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+    display: flex; /* Torna o cabeçalho um contêiner flexível */
+    justify-content: space-between; /* Espaça os itens: título+favorito à esquerda, close à direita */
+    align-items: center; /* Centraliza verticalmente os itens */
 }
 
 .modal-header h2 {
@@ -223,7 +287,7 @@ body {
 .modal-body img {
     max-width: 100%;
     height: auto;
-    margin-top: 10px;
+    margin-top: 2px;
     border-radius: 5px;
 }
 
@@ -241,6 +305,7 @@ body {
     border: 1px solid var(--color-border-dark);
     border-radius: 5px;
     object-fit: contain;
+    /* Changed from 'cover' to 'contain' */
     cursor: pointer;
 }
 
@@ -291,16 +356,23 @@ body {
     color: #c82333;
 }
 
-.auth-buttons {
+/* A classe .auth-buttons original será removida ou redefinida */
+/* Se você ainda a usa em outros lugares para botões agrupados que não sejam no topo,
+   pode ser necessário renomeá-la ou ajustá-la para o novo contexto.
+   Para o propósito de posicionar os botões no topo, ela é removida/ignorada aqui. */
+/* .auth-buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
     width: 100%;
     justify-content: flex-end;
     max-width: 800px;
-}
+    flex-wrap: wrap;
+    padding: 0 20px;
+    box-sizing: border-box;
+} */
 
-.auth-buttons button {
+.auth-buttons button { /* Este seletor ainda pode afetar os botões dentro de .admin-auth-group */
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -308,16 +380,29 @@ body {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
+    flex-shrink: 0;
+    /* Prevent buttons from shrinking too much */
 }
 
 .login-btn {
-    background-color: var(--color-gold);
+    padding: 6px 12px;
     opacity: 0;
 }
 
-.login-btn:hover {
+/* Specific button styles */
+.login-btn,
+.create-product-btn,
+.create-category-btn,
+.manage-categories-btn {
+    /* Apply common styling */
+    background-color: var(--color-gold);
+}
+
+.create-product-btn:hover,
+.create-category-btn:hover,
+.manage-categories-btn:hover {
+    /* Apply common hover styling */
     background-color: var(--color-light-gold);
-    opacity: 1;
 }
 
 .logout-btn {
@@ -326,18 +411,6 @@ body {
 
 .logout-btn:hover {
     background-color: #c82333;
-}
-
-.create-product-btn,
-.create-category-btn,
-.manage-categories-btn {
-    background-color: var(--color-gold);
-}
-
-.create-product-btn:hover,
-.create-category-btn:hover,
-.manage-categories-btn:hover {
-    background-color: var(--color-light-gold);
 }
 
 .message-modal .modal-content {
@@ -357,7 +430,9 @@ body {
 
 .product-form-modal .modal-content,
 .category-form-modal .modal-content,
-.manage-categories-modal .modal-content {
+.manage-categories-modal .modal-content,
+.favorites-modal .modal-content {
+    /* Added .favorites-modal */
     max-width: 600px;
     border: 1px solid var(--color-gold);
     padding: 25px;
@@ -365,14 +440,18 @@ body {
 
 .product-form-modal .modal-header,
 .category-form-modal .modal-header,
-.manage-categories-modal .modal-header {
+.manage-categories-modal .modal-header,
+.favorites-modal .modal-header {
+    /* Added .favorites-modal */
     border-bottom: 1px solid var(--color-border-dark);
     margin-bottom: 20px;
 }
 
 .product-form-modal .modal-header h2,
 .category-form-modal .modal-header h2,
-.manage-categories-modal .modal-header h2 {
+.manage-categories-modal .modal-header h2,
+.favorites-modal .modal-header h2 {
+    /* Added .favorites-modal */
     color: var(--color-gold);
     font-size: 1.8em;
     font-weight: bold;
@@ -419,7 +498,9 @@ body {
 }
 
 .product-form-modal button,
-.category-form-modal button {
+.category-form-modal button,
+.favorites-modal button {
+    /* Added .favorites-modal */
     margin-top: 25px;
     padding: 14px 28px;
     border: none;
@@ -435,7 +516,9 @@ body {
 }
 
 .product-form-modal button:hover,
-.category-form-modal button:hover {
+.category-form-modal button:hover,
+.favorites-modal button:hover {
+    /* Added .favorites-modal */
     background-color: var(--color-light-gold);
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
@@ -535,11 +618,13 @@ body {
     width: 20px;
     height: 20px;
     margin-right: 8px;
+    vertical-align: middle;
 }
 
 .whatsapp-share-btn {
     background-color: #25D366;
     color: white;
+    padding-block: 10px;
 }
 
 .whatsapp-share-btn:hover {
@@ -628,6 +713,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    /* Added for positioning favorite icon */
 }
 
 .carousel-image-display {
@@ -837,10 +924,12 @@ h1 {
 
 @media (max-width: 768px) {
 
-    .auth-buttons {
+    /* Remova este bloco se .auth-buttons não for mais usado para esse layout */
+    /* .auth-buttons {
         flex-wrap: wrap;
         justify-content: center;
         padding: 0 10px;
+        position: relative;
     }
 
     .auth-buttons button {
@@ -852,6 +941,21 @@ h1 {
 
     .auth-buttons button:last-child {
         margin-bottom: 0;
+    } */
+
+    .top-bar { /* Ajuste para mobile se necessário, mas o flexbox já é responsivo */
+        padding: 0 10px;
+    }
+
+    .admin-auth-group {
+        flex-direction: column; /* Empilha os botões em telas pequenas */
+        width: auto; /* Deixa o conteúdo determinar a largura */
+        align-items: flex-end; /* Alinha os botões à direita quando empilhados */
+    }
+
+    .admin-auth-group button {
+        width: auto; /* Permite que o botão tenha a largura do conteúdo */
+        margin-bottom: 5px; /* Espaçamento entre os botões empilhados */
     }
 
     .modal-content {
@@ -860,10 +964,24 @@ h1 {
 
     .product-form-modal .modal-content,
     .category-form-modal .modal-content,
-    .manage-categories-modal .modal-content {
+    .manage-categories-modal .modal-content,
+    .favorites-modal .modal-content {
+        /* Added .favorites-modal */
         padding: 15px;
         height: 80vh;
         overflow: scroll;
+    }
+
+    /* Override for favorites modal on mobile */
+    .modal#favoritesModal .modal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        padding: 15px;
+        /* Adjust padding for mobile as needed */
+        margin: 0;
+        overflow-y: auto;
+        /* Ensure scrollability */
     }
 
     .drop-area {
@@ -898,8 +1016,8 @@ h1 {
         padding: 8px;
     }
 
-    .auth-buttons button {
-        width: 100%;
+    .admin-auth-group button { /* Ajuste para botões de admin em telas muito pequenas */
+        width: 100%; /* Faz com que ocupem a largura total disponível */
     }
 
     .modal-content {
@@ -908,7 +1026,9 @@ h1 {
 
     .product-form-modal .modal-content,
     .category-form-modal .modal-content,
-    .manage-categories-modal .modal-content {
+    .manage-categories-modal .modal-content,
+    .favorites-modal .modal-content {
+        /* Added .favorites-modal */
         padding: 10px;
     }
 
@@ -921,7 +1041,9 @@ h1 {
     }
 
     .product-form-modal button,
-    .category-form-modal button {
+    .category-form-modal button,
+    .favorites-modal button {
+        /* Added .favorites-modal */
         padding: 12px 20px;
         font-size: 1em;
     }
@@ -1001,4 +1123,208 @@ h1 {
     cursor: not-allowed;
     transform: translateY(0);
     box-shadow: none;
+}
+
+/* Favorites specific styles */
+.favorite-icon-btn {
+    /* Remova ou comente as seguintes linhas */
+    /* position: absolute; */
+    /* top: 10px; */
+    /* right: 50px; */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.title-and-favorite-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Espaçamento entre o título e o botão de favoritos */
+}
+
+.carousel-product-title {
+    margin: 0; /* Remova margens padrão que podem atrapalhar o alinhamento flex */
+    /* Outros estilos existentes para o título permanecem */
+}
+
+.favorite-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-text-on-dark);
+    /* Default color (unfavorited) */
+    transition: color 0.2s ease, fill 0.2s ease;
+}
+
+.favorite-icon.favorited {
+    color: #ff0000;
+    /* Red for favorited */
+    fill: #ff0000;
+    /* Fill the heart */
+}
+
+.favorite-icon-btn:hover .favorite-icon {
+    color: #ff0000;
+    /* Hover effect */
+}
+
+.favorite-main-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    /* Adicionado padding para o botão de favoritos no topo */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-text-on-dark); /* Cor do texto no botão */
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-main-btn .favorite-icon {
+    color: var(--color-gold); /* Ícone branco/claro para o botão principal */
+    fill: currentColor; /* Preenche com a cor do texto do botão */
+    width: 26px;
+    height: 26px;
+}
+
+.favorites-modal .modal-body {
+    max-height: 70vh;
+    /* Make favorites list scrollable if many items */
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+#favoritesModal .close {
+    font-size: 3rem;
+    line-height: 1.4;
+}
+
+.favorites-list .item {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    margin: 5px 0;
+    background-color: var(--color-dark-background);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.favorites-list .item:hover {
+    background-color: #3a3a3a;
+    border-color: var(--color-gold);
+}
+
+.favorites-list .item-content {
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+.favorites-list .item-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--color-text-on-dark);
+}
+
+.favorites-list .item-description {
+    font-size: 0.85em;
+    color: #b0b0b0;
+    margin-top: 2px;
+}
+
+.favorites-list .item-price {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--color-gold);
+    margin-top: 5px;
+    /* position: absolute; */
+    /* Removed absolute positioning for flow */
+    right: 0;
+    top: 6px;
+}
+
+.favorites-list .remove-favorite-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.favorites-list .remove-favorite-btn:hover {
+    background-color: #c82333;
+}
+
+.favorites-modal .no-favorites-message {
+    text-align: center;
+    color: #b0b0b0;
+    padding: 20px;
+}
+
+/* Remova este bloco se .auth-buttons não for mais usado para esse layout */
+/* @media (max-width: 768px) {
+    .auth-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 10px;
+        position: relative;
+    }
+
+    .auth-buttons button {
+        width: calc(50% - 5px);
+        margin-bottom: 10px;
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+
+    .auth-buttons button:last-child {
+        margin-bottom: 0;
+    }
+} */
+
+@media (max-width: 480px) {
+    .admin-auth-group {
+        flex-direction: column; /* Empilha em telas muito pequenas */
+        align-items: stretch; /* Estica para preencher a largura disponível */
+    }
+    .admin-auth-group button {
+        width: 100%; /* Ocupa toda a largura disponível */
+        margin-bottom: 5px; /* Espaçamento entre os botões */
+    }
+    .admin-auth-group button:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.remove-favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-favorite-btn svg:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s ease;
 }

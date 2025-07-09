@@ -2,6 +2,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('produto');
 
+    loadFavoritesFromLocalStorage(); // Load favorites on DOMContentLoaded
+
     if (productId) {
         // Espera os dados carregarem e depois abre o modal
         const checkReady = setInterval(() => {
@@ -59,6 +61,8 @@ let currentImageIndex = 0;
 let currentProductInCarousel = null;
 let touchStartX = 0;
 
+let favoriteProductIds = []; // New global variable for favorited product IDs
+
 async function initializeFirebase() {
     try {
         if (!firebaseConfig || Object.keys(firebaseConfig).length === 0 || !firebaseConfig.projectId) {
@@ -93,6 +97,19 @@ async function initializeFirebase() {
     }
 }
 
+function loadFavoritesFromLocalStorage() {
+    const favorites = localStorage.getItem('favoriteProductIds');
+    favoriteProductIds = favorites ? JSON.parse(favorites) : [];
+}
+
+function saveFavoritesToLocalStorage() {
+    localStorage.setItem('favoriteProductIds', JSON.stringify(favoriteProductIds));
+}
+
+function isFavorited(productId) {
+    return favoriteProductIds.includes(productId);
+}
+
 async function loadCategoriesFromFirestore() {
     if (!db) {
         console.warn("Firestore não disponível para carregar categorias.");
@@ -112,7 +129,8 @@ async function loadCategoriesFromFirestore() {
             console.error("Erro ao carregar categorias do Firestore:", error);
             showMessage("Erro", "Não foi possível carregar as categorias.");
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error("Erro ao carregar categorias do Firestore:", error);
         showMessage("Erro", "Não foi possível carregar as categorias.");
     }
@@ -132,12 +150,16 @@ async function loadItemsFromFirestore() {
             });
             items = fetchedItems;
             renderItems();
+            if (favoriteProductIds.length > 0) {
+                renderFavoritesModal();
+            }
         }, (error) => {
             console.error("Erro ao carregar itens do Firestore:", error);
             showMessage("Erro", "Não foi possível carregar os itens.");
         });
 
-    } catch (error) {
+    }
+    catch (error) {
         console.error("Erro ao carregar itens do Firestore:", error);
         showMessage("Erro", "Não foi possível carregar os itens.");
     }
@@ -182,6 +204,9 @@ const categoryFilterDropdown = document.getElementById('categoryFilter');
 const productSearchInput = document.getElementById('productSearch');
 const confirmModal = document.getElementById('confirmModal');
 const confirmModalText = document.getElementById('confirmModalText');
+const productFavoriteIcon = document.getElementById('productFavoriteIcon'); // New element
+const favoritesModal = document.getElementById('favoritesModal'); // New element
+const favoritesList = document.getElementById('favoritesList'); // New element
 
 const dropAreaAdd = document.getElementById('dropAreaAdd');
 const imageUploadAdd = document.getElementById('imageUploadAdd');
@@ -827,14 +852,11 @@ window.updateProduct = async function () {
 
         const uploadedUrls = [];
         const progressContainer = document.createElement('div');
-        // It's better to append progressContainer to a specific element within the modal
-        // For simplicity in this example, assuming it can be appended to body or a relevant modal part.
-        // A more robust solution might involve adding a dedicated progress area in the edit modal.
-        // For now, I'll keep it as is, just noting the potential for better placement.
-        editProductModal.querySelector('.modal-body').appendChild(progressContainer); // Changed from addProductModal
+        // FIX: Append progressContainer to editProductModal
+        editProductModal.querySelector('.modal-body').appendChild(progressContainer);
 
         // FIX: Use uploadedImageFilesEdit instead of uploadedImageFilesAdd
-        for (const file of uploadedImageFilesEdit) { // Changed from uploadedImageFilesAdd
+        for (const file of uploadedImageFilesEdit) {
             const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -898,6 +920,30 @@ window.updateProduct = async function () {
     }
 };
 
+function updateFavoriteIconUI() {
+    const icon = document.getElementById("productFavoriteIcon");
+    if (!icon || !currentProductInCarousel) return;
+
+    const isFav = isFavorited(currentProductInCarousel.id);
+    icon.setAttribute("fill", isFav ? "#c9ab00" : "#ffffff");
+}
+
+window.toggleFavorite = function () {
+    if (!currentProductInCarousel) return;
+
+    const productId = currentProductInCarousel.id;
+
+    if (isFavorited(productId)) {
+        favoriteProductIds = favoriteProductIds.filter(id => id !== productId);
+    } else {
+        favoriteProductIds.push(productId);
+    }
+
+    saveFavoritesToLocalStorage();
+    updateFavoriteIconUI(); // Atualiza o ícone no modal após ação
+}
+
+
 window.openImageCarouselModal = function (product) {
     currentProductInCarousel = product;
     currentCarouselImages = product.images;
@@ -911,6 +957,13 @@ window.openImageCarouselModal = function (product) {
         carouselProductPrice.textContent = "Preço não disponível";
     }
 
+    // Set favorite icon state
+    if (isFavorited(product.id)) {
+        productFavoriteIcon.classList.add('favorited');
+    } else {
+        productFavoriteIcon.classList.remove('favorited');
+    }
+
     updateCarouselImage();
     imageCarouselModal.style.display = 'flex';
 
@@ -919,6 +972,8 @@ window.openImageCarouselModal = function (product) {
     carouselImage.addEventListener('touchend', handleTouchEnd, false);
 
     imageCarouselModal.addEventListener('click', handleCarouselModalOutsideClick);
+    currentProductInCarousel = product;
+    updateFavoriteIconUI();
 };
 
 window.closeImageCarouselModal = function () {
@@ -931,6 +986,12 @@ window.closeImageCarouselModal = function () {
     carouselProductTitle.textContent = "";
     carouselProductDescription.textContent = "";
     carouselProductPrice.textContent = "";
+
+    // Remove event listeners to prevent memory leaks if they are re-added every time
+    carouselImage.removeEventListener('touchstart', handleTouchStart);
+    carouselImage.removeEventListener('touchmove', handleTouchMove);
+    carouselImage.removeEventListener('touchend', handleTouchEnd);
+    imageCarouselModal.removeEventListener('click', handleCarouselModalOutsideClick);
 };
 
 window.shareProductOnWhatsApp = function (name) {
@@ -1296,5 +1357,172 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
         reader.readAsDataURL(file);
     }
 }
+
+// Favorites Modal Functions
+window.openFavoritesModal = function () {
+    renderFavoritesModal(); // chama a versão com total e botão
+
+    favoritesModal.style.display = 'flex';
+    setTimeout(() => {
+        favoritesModal.classList.add('is-active');
+    }, 10);
+};
+
+window.shareFavoritesOnWhatsApp = function (name, favoritedProducts, total) {
+    if (!favoritedProducts || favoritedProducts.length === 0) {
+        showMessage("Erro", "Não há produtos favoritos para compartilhar.");
+        return;
+    }
+
+    const whatsappNumber = name === 'leo' ? "5577988343473" : '5577981341126';
+
+    const lines = favoritedProducts.map(p => {
+        const price = p.price !== undefined && p.price !== null
+            ? ` - R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}`
+            : "";
+        const code = p.code ? ` (Cód: ${p.code})` : "";
+        return `• ${p.title}${code}${price}`;
+    });
+
+    const totalLine = `\n*Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
+    const message = `Olá! Tenho interesse na cotação destes produtos:\n\n${lines.join("\n")}${totalLine}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, '_blank');
+};
+
+function renderFavoritesModal() {
+    favoritesList.innerHTML = ''; // limpa lista
+
+    if (favoriteProductIds.length === 0) {
+        const message = document.createElement('li');
+        message.textContent = 'Você ainda não possui produtos favoritos.';
+        message.className = 'no-favorites-message';
+        favoritesList.appendChild(message);
+        return;
+    }
+
+    const favoritedProducts = items.filter(item => favoriteProductIds.includes(item.id));
+
+    favoritedProducts.forEach(item => {
+        const li = document.createElement("li");
+        li.className = "item";
+        li.onclick = () => {
+            closeFavoritesModal();
+            openImageCarouselModal(item);
+        };
+
+        const itemContent = document.createElement("div");
+        itemContent.className = "item-content relative";
+
+        const itemTitle = document.createElement("div");
+        itemTitle.textContent = item.title;
+        itemTitle.className = "item-title";
+        itemContent.appendChild(itemTitle);
+
+        if (item.code && item.code.trim() !== "") {
+            const productCodeSpan = document.createElement("span");
+            productCodeSpan.textContent = `cod:.${item.code}`;
+            productCodeSpan.className = "product-code";
+            itemContent.appendChild(productCodeSpan);
+        }
+
+        const itemDescription = document.createElement("div");
+        itemDescription.textContent = item.description;
+        itemDescription.className = "item-description";
+        itemContent.appendChild(itemDescription);
+
+        if (item.price !== undefined && item.price !== null) {
+            const itemPrice = document.createElement("div");
+            itemPrice.textContent = `R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}`;
+            itemPrice.className = "item-price";
+            itemContent.appendChild(itemPrice);
+        }
+
+        li.appendChild(itemContent);
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "remove-favorite-btn";
+        removeButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#dc3545" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+        `;
+        removeButton.title = "Remover dos favoritos";
+        removeButton.onclick = (event) => {
+            event.stopPropagation();
+            favoriteProductIds = favoriteProductIds.filter(id => id !== item.id);
+            saveFavoritesToLocalStorage();
+            renderFavoritesModal();
+
+            if (currentProductInCarousel && currentProductInCarousel.id === item.id) {
+                updateFavoriteIconUI();
+            }
+        };
+
+        li.appendChild(removeButton);
+        favoritesList.appendChild(li);
+    });
+
+    // Adiciona total + botões de compartilhamento
+    const total = favoritedProducts.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+    const totalAndShareContainer = document.createElement("div");
+    totalAndShareContainer.style.marginTop = "20px";
+    totalAndShareContainer.style.paddingTop = "20px";
+    totalAndShareContainer.style.borderTop = "1px solid var(--color-border-dark)";
+
+    const totalText = document.createElement("div");
+    totalText.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+    totalText.style.fontWeight = "bold";
+    totalText.style.color = "#c9ab00";
+    totalText.style.fontSize = "1.2em";
+    totalText.style.marginBottom = "15px";
+    totalText.style.textAlign = "right";
+
+    const shareButtonsContainer = document.createElement("div");
+    shareButtonsContainer.className = 'carousel-share-buttons'; // Reutiliza a classe para o layout dos botões
+    shareButtonsContainer.style.marginTop = '0';
+
+    // Botão para Léo
+    const shareButtonLeo = document.createElement("button");
+    shareButtonLeo.className = "share-btn whatsapp-share-btn";
+    shareButtonLeo.innerHTML = `<img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para <strong>Léo</strong></span>`;
+    shareButtonLeo.onclick = () => shareFavoritesOnWhatsApp('leo', favoritedProducts, total);
+
+    // Botão para Júnior
+    const shareButtonJunior = document.createElement("button");
+    shareButtonJunior.className = "share-btn whatsapp-share-btn";
+    shareButtonJunior.innerHTML = `<img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para <strong>Júnior</strong></span>`;
+    shareButtonJunior.onclick = () => shareFavoritesOnWhatsApp('junior', favoritedProducts, total);
+
+    shareButtonsContainer.appendChild(shareButtonLeo);
+    shareButtonsContainer.appendChild(shareButtonJunior);
+
+    totalAndShareContainer.appendChild(totalText);
+    totalAndShareContainer.appendChild(shareButtonsContainer);
+
+    favoritesList.appendChild(totalAndShareContainer);
+}
+
+window.closeFavoritesModal = function () {
+    favoritesModal.classList.remove('is-active');
+    // Remove display: flex after animation ends
+    favoritesModal.addEventListener('transitionend', function handler() {
+        favoritesModal.style.display = 'none';
+        favoritesModal.removeEventListener('transitionend', handler);
+    });
+};
+
+function removeFromFavorites(productId) {
+    favoriteProductIds = favoriteProductIds.filter(id => id !== productId);
+    saveFavoritesToLocalStorage();
+    openFavoritesModal(); // Re-render the favorites list
+
+    // NOVO: Verifica se o produto atual no carrossel é o que foi desfavoritado e atualiza o ícone IMEDIATAMENTE
+    if (currentProductInCarousel && currentProductInCarousel.id === productId) {
+        productFavoriteIcon.classList.remove('favorited'); // Garante que a classe 'favorited' seja removida
+    }
+}
+
 
 window.onload = initializeFirebase;

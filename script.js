@@ -32,6 +32,13 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Fechar dropdown do admin ao clicar fora
+    window.addEventListener('click', function(event) {
+        if (!document.getElementById('adminMenu').contains(event.target)) {
+            closeAdminMenu();
+        }
+    });
 });
 
 const firebaseConfig = {
@@ -189,9 +196,7 @@ const editProductPriceInput = document.getElementById("editProductPrice");
 const modalDescription = document.getElementById("modalDescription");
 const modalGallery = document.getElementById("modalGallery");
 const authButton = document.getElementById("authButton");
-const createProductButton = document.getElementById("createProductButton");
-const createCategoryButton = document.getElementById("createCategoryButton");
-const manageCategoriesButton = document.getElementById("manageCategoriesButton");
+const adminMenu = document.getElementById('adminMenu');
 const messageModal = document.getElementById("messageModal");
 const messageModalTitle = document.getElementById("messageModalTitle");
 const messageModalText = document.getElementById("messageModalText");
@@ -272,31 +277,44 @@ window.executeConfirmedDeletion = async function () {
 
 function updateAuthUI(isAuthenticated) {
     if (isAuthenticated && localStorage.getItem("adminAuthenticated") === "true") {
-        authButton.textContent = "Sair";
-        authButton.classList.remove('login-btn');
-        authButton.classList.add('logout-btn');
-        createProductButton.style.display = "block";
-        createCategoryButton.style.display = "block";
-        manageCategoriesButton.style.display = "block";
+        authButton.style.display = 'none';
+        adminMenu.style.display = 'inline-block';
+        document.body.classList.add('admin-logged-in');
     } else {
-        authButton.textContent = "Login";
-        authButton.classList.remove('logout-btn');
-        authButton.classList.add('login-btn');
-        createProductButton.style.display = "none";
-        createCategoryButton.style.display = "none";
-        manageCategoriesButton.style.display = "none";
+        authButton.style.display = 'inline-block';
+        adminMenu.style.display = 'none';
+        document.body.classList.remove('admin-logged-in');
         localStorage.removeItem("adminAuthenticated");
     }
     renderItems();
 }
 
 window.toggleAuth = function () {
-    if (authButton.textContent === "Login") {
-        openLoginModal();
-    } else {
-        logout();
+    openLoginModal();
+}
+
+window.logout = async function () {
+    try {
+        await auth.signOut();
+        localStorage.removeItem("adminAuthenticated");
+        updateAuthUI(false);
+        closeAdminMenu();
+        showMessage("Sucesso", "Logout realizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+        showMessage("Erro", "Não foi possível fazer logout. Tente novamente.");
     }
 }
+
+window.toggleAdminMenu = function() {
+    document.getElementById("adminDropdownContent").style.display = 
+        document.getElementById("adminDropdownContent").style.display === "block" ? "none" : "block";
+}
+
+window.closeAdminMenu = function() {
+    document.getElementById("adminDropdownContent").style.display = "none";
+}
+
 
 function populateCategoryDropdowns() {
     productCategorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
@@ -666,17 +684,6 @@ window.authenticateAdmin = function () {
     }
 }
 
-async function logout() {
-    try {
-        await auth.signOut();
-        localStorage.removeItem("adminAuthenticated");
-        updateAuthUI(false);
-        showMessage("Sucesso", "Logout realizado com sucesso!");
-    } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-        showMessage("Erro", "Não foi possível fazer logout. Tente novamente.");
-    }
-}
 
 window.openAddProductModal = function () {
     addProductModal.style.display = "flex";

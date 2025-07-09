@@ -76,15 +76,9 @@ body.modal-is-open .sticky-header {
 }
 
 /* Novo estilo para agrupar os botões de administração e login */
-.admin-auth-group {
-    display: flex;
-    gap: 10px;
-    /* Espaço entre os botões */
-    flex-wrap: wrap;
-    /* Permite que os botões quebrem a linha em telas menores */
-    justify-content: flex-end;
-    /* Garante que fiquem alinhados à direita dentro do grupo */
-    align-items: center;
+.actions-container {
+    position: relative;
+    display: inline-block;
 }
 
 .header-logo {
@@ -395,7 +389,6 @@ body.modal-is-open .sticky-header {
 }
 
 .auth-buttons button {
-    /* Este seletor ainda pode afetar os botões dentro de .admin-auth-group */
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -404,29 +397,21 @@ body.modal-is-open .sticky-header {
     font-size: 1em;
     transition: background-color 0.3s ease;
     flex-shrink: 0;
-    /* Prevent buttons from shrinking too much */
 }
 
-.login-btn {
+.login-btn, .admin-menu-btn {
     padding: 6px 12px;
-    opacity: 0;
-}
-
-/* Specific button styles */
-.login-btn,
-.create-product-btn,
-.create-category-btn,
-.manage-categories-btn {
-    /* Apply common styling */
     background-color: var(--color-gold);
+    color: var(--color-text-on-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
 }
-
-.create-product-btn:hover,
-.create-category-btn:hover,
-.manage-categories-btn:hover {
-    /* Apply common hover styling */
+.login-btn:hover, .admin-menu-btn:hover {
     background-color: var(--color-light-gold);
 }
+
 
 .logout-btn {
     background-color: #dc3545;
@@ -1027,10 +1012,10 @@ h1 {
         padding: 8px;
     }
 
-    .admin-auth-group button {
-        /* Ajuste para botões de admin em telas muito pequenas */
-        width: 100%;
-        /* Faz com que ocupem a largura total disponível */
+    .actions-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: flex-start;
     }
 
     .modal-content {
@@ -1327,4 +1312,42 @@ h1 {
 .remove-favorite-btn svg:hover {
     transform: scale(1.2);
     transition: transform 0.2s ease;
+}
+
+/* Admin Menu Dropdown */
+.admin-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.admin-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--color-light-background);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    border: 1px solid var(--color-border-dark);
+}
+
+.admin-dropdown-content button {
+    color: var(--color-text-on-dark);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.admin-dropdown-content button:hover {
+    background-color: var(--color-dark-background);
+}
+
+/* Oculta o botão de favoritos quando o admin está logado */
+body.admin-logged-in .favorite-main-btn {
+    display: none;
 }

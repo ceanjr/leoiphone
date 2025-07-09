@@ -944,28 +944,47 @@ window.updateProduct = async function () {
 };
 
 function updateFavoriteIconUI() {
-    const icon = document.getElementById("productFavoriteIcon");
+    const icon = document.getElementById('productFavoriteIcon');
     if (!icon || !currentProductInCarousel) return;
 
     const isFav = isFavorited(currentProductInCarousel.id);
-    icon.setAttribute("fill", isFav ? "#c9ab00" : "#ffffff");
+
+    if (isFav) {
+        icon.classList.add('favorited');
+    } else {
+        icon.classList.remove('favorited');
+    }
 }
 
-window.toggleFavorite = function () {
+window.toggleFavorite = function() {
     if (!currentProductInCarousel) return;
 
     const productId = currentProductInCarousel.id;
+    const favoriteButton = document.getElementById("favoriteProductButton");
+    const icon = document.getElementById('productFavoriteIcon');
 
+    if (!icon || !favoriteButton) return;
+    
+    // Adiciona classe para efeito de clique no botão
+    favoriteButton.classList.add('clicked');
+    setTimeout(() => {
+        favoriteButton.classList.remove('clicked');
+    }, 500);
+
+    // Verifica o estado atual e atualiza tanto os dados quanto a UI
     if (isFavorited(productId)) {
+        // Se já é favorito, remove
         favoriteProductIds = favoriteProductIds.filter(id => id !== productId);
+        icon.classList.remove('favorited'); // Atualiza a UI imediatamente
     } else {
+        // Se não é favorito, adiciona
         favoriteProductIds.push(productId);
+        icon.classList.add('favorited'); // Atualiza a UI imediatamente
     }
 
+    // Salva o novo estado no localStorage
     saveFavoritesToLocalStorage();
-    updateFavoriteIconUI(); // Atualiza o ícone no modal após ação
 }
-
 
 window.openImageCarouselModal = function (product) {
     currentProductInCarousel = product;
@@ -980,11 +999,12 @@ window.openImageCarouselModal = function (product) {
         carouselProductPrice.textContent = "Preço não disponível";
     }
 
-    // Set favorite icon state
+    // Atualiza o estado do ícone de favoritos
+    const favoriteIcon = document.getElementById('productFavoriteIcon');
     if (isFavorited(product.id)) {
-        productFavoriteIcon.classList.add('favorited');
+        favoriteIcon.classList.add('favorited');
     } else {
-        productFavoriteIcon.classList.remove('favorited');
+        favoriteIcon.classList.remove('favorited');
     }
 
     updateCarouselImage();
@@ -995,8 +1015,6 @@ window.openImageCarouselModal = function (product) {
     carouselImage.addEventListener('touchend', handleTouchEnd, false);
 
     imageCarouselModal.addEventListener('click', handleCarouselModalOutsideClick);
-    currentProductInCarousel = product;
-    updateFavoriteIconUI();
 };
 
 window.closeImageCarouselModal = function () {
@@ -1381,11 +1399,12 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
     }
 }
 
-// Favorites Modal Functions
-window.openFavoritesModal = function () {
-    renderFavoritesModal(); // chama a versão com total e botão
-    document.body.classList.add('modal-is-open'); // Adiciona classe ao body
+window.openFavoritesModal = function() {
+    renderFavoritesModal(); // Adicione esta linha para renderizar o conteúdo atualizado
+    document.body.classList.add('modal-is-open');
     favoritesModal.style.display = 'flex';
+    
+    // Pequeno delay para garantir que o display:flex foi aplicado antes da animação
     setTimeout(() => {
         favoritesModal.classList.add('is-active');
     }, 10);
@@ -1466,6 +1485,7 @@ function renderFavoritesModal() {
 
         const removeButton = document.createElement("button");
         removeButton.className = "remove-favorite-btn";
+        removeButton.setAttribute('data-id', item.id);
         removeButton.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" fill="#dc3545" viewBox="0 0 24 24" width="24" height="24">
                 <path d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
@@ -1526,24 +1546,31 @@ function renderFavoritesModal() {
     favoritesList.appendChild(totalAndShareContainer);
 }
 
-window.closeFavoritesModal = function () {
-    document.body.classList.remove('modal-is-open'); // Remove classe do body
+window.closeFavoritesModal = function() {
     favoritesModal.classList.remove('is-active');
+    document.body.classList.remove('modal-is-open');
+    
     // Remove display: flex after animation ends
-    favoritesModal.addEventListener('transitionend', function handler() {
+    setTimeout(() => {
         favoritesModal.style.display = 'none';
-        favoritesModal.removeEventListener('transitionend', handler);
-    });
+    }, 300);
 };
 
 function removeFromFavorites(productId) {
+    const removeButton = document.querySelector(`.remove-favorite-btn[data-id="${productId}"]`);
+    if (removeButton) {
+        removeButton.classList.add('removing');
+        setTimeout(() => {
+            removeButton.classList.remove('removing');
+        }, 500);
+    }
+
     favoriteProductIds = favoriteProductIds.filter(id => id !== productId);
     saveFavoritesToLocalStorage();
-    openFavoritesModal(); // Re-render the favorites list
+    renderFavoritesModal();
 
-    // NOVO: Verifica se o produto atual no carrossel é o que foi desfavoritado e atualiza o ícone IMEDIATAMENTE
     if (currentProductInCarousel && currentProductInCarousel.id === productId) {
-        productFavoriteIcon.classList.remove('favorited'); // Garante que a classe 'favorited' seja removida
+        updateFavoriteIconUI();
     }
 }
 

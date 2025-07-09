@@ -23,6 +23,10 @@ body.modal-is-open .sticky-header {
     transform: translateY(-100%);
 }
 
+input, textarea, select {
+    font-size: 16px; /* Evita zoom no iOS */
+}
+
 .sticky-header {
     position: fixed;
     top: 0;
@@ -255,19 +259,32 @@ body.modal-is-open .sticky-header {
 /* Specific styling for the favorites modal */
 .modal#favoritesModal {
     justify-content: flex-end;
-    /* Align to the right for slide-in */
     transform: translateX(100%);
-    /* Start off-screen to the right */
-    transition: transform 0.3s ease-out;
-    /* Smooth transition for slide */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
 }
 
 .modal#favoritesModal.is-active {
-    /* Class to be added by JS when opening */
     transform: translateX(0);
-    /* Slide into view */
+    opacity: 1;
 }
 
+body.modal-is-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+body.modal-is-open::before {
+    opacity: 1;
+}
 
 .modal-content {
     background-color: var(--color-light-background);
@@ -403,7 +420,8 @@ body.modal-is-open .sticky-header {
     opacity: 0;
 }
 
-.login-btn, .admin-menu-btn {
+.login-btn,
+.admin-menu-btn {
     padding: 6px 12px;
     background-color: var(--color-gold);
     color: var(--color-text-on-light);
@@ -413,7 +431,8 @@ body.modal-is-open .sticky-header {
     font-size: 1em;
 }
 
-.login-btn:hover, .admin-menu-btn:hover {
+.login-btn:hover,
+.admin-menu-btn:hover {
     background-color: var(--color-light-gold);
 }
 
@@ -1128,6 +1147,20 @@ h1 {
     box-shadow: none;
 }
 
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* Favorites specific styles */
 .favorite-icon-btn {
     background: none;
@@ -1140,6 +1173,11 @@ h1 {
     justify-content: center;
     align-items: center;
     z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.favorite-icon-btn.clicked {
+    animation: pulse 0.5s ease;
 }
 
 .title-and-favorite-group {
@@ -1161,14 +1199,14 @@ h1 {
     height: 24px;
     color: var(--color-text-on-dark);
     /* Default color (unfavorited) */
+    fill: var(--color-text-on-dark);
+    /* Garante que o preenchimento seja da cor padrão */
     transition: color 0.2s ease, fill 0.2s ease;
 }
 
 .favorite-icon.favorited {
-    color: var(--color-gold);
-    /* Red for favorited */
-    fill: var(--color-gold);
-    /* Fill the heart */
+    color: var(--color-gold); /* Cor quando favoritado */
+    fill: var(--color-gold); /* Preenche o ícone */
 }
 
 .favorite-icon-btn:hover .favorite-icon {
@@ -1224,7 +1262,7 @@ h1 {
     border-radius: 8px;
     margin: 5px 0;
     background-color: var(--color-dark-background);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1234,6 +1272,8 @@ h1 {
 .favorites-list .item:hover {
     background-color: #3a3a3a;
     border-color: var(--color-gold);
+        transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .favorites-list .item-content {
@@ -1304,6 +1344,25 @@ h1 {
     }
 }
 
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+
 .remove-favorite-btn {
     background: none;
     border: none;
@@ -1314,9 +1373,17 @@ h1 {
     justify-content: center;
 }
 
-.remove-favorite-btn svg:hover {
-    transform: scale(1.2);
-    transition: transform 0.2s ease;
+.remove-favorite-btn svg {
+    transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.remove-favorite-btn:hover svg {
+    transform: scale(1.1);
+    fill: #c82333;
+}
+
+.remove-favorite-btn.removing {
+    animation: shake 0.5s ease;
 }
 
 /* Admin Menu Dropdown */
@@ -1330,7 +1397,7 @@ h1 {
     position: absolute;
     background-color: var(--color-light-background);
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 5px;
     border: 1px solid var(--color-border-dark);

@@ -8,6 +8,10 @@
     --color-border-dark: #444;
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     font-family: 'Barlow', sans-serif;
     background-color: var(--color-dark-background);
@@ -16,6 +20,8 @@ body {
     flex-direction: column;
     align-items: center;
     color: var(--color-text-on-dark);
+    -webkit-tap-highlight-color: transparent;
+    /* <-- ADICIONE ESTA LINHA */
 }
 
 /* Esconde a barra superior quando um modal estiver aberto */
@@ -23,8 +29,11 @@ body.modal-is-open .sticky-header {
     transform: translateY(-100%);
 }
 
-input, textarea, select {
-    font-size: 16px; /* Evita zoom no iOS */
+input,
+textarea,
+select {
+    font-size: 16px;
+    /* Evita zoom no iOS */
 }
 
 .sticky-header {
@@ -1205,8 +1214,10 @@ h1 {
 }
 
 .favorite-icon.favorited {
-    color: var(--color-gold); /* Cor quando favoritado */
-    fill: var(--color-gold); /* Preenche o ícone */
+    color: var(--color-gold);
+    /* Cor quando favoritado */
+    fill: var(--color-gold);
+    /* Preenche o ícone */
 }
 
 .favorite-icon-btn:hover .favorite-icon {
@@ -1272,7 +1283,7 @@ h1 {
 .favorites-list .item:hover {
     background-color: #3a3a3a;
     border-color: var(--color-gold);
-        transform: translateY(-3px);
+    transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 

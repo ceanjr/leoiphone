@@ -100,7 +100,7 @@ select {
 }
 
 .header-logo img {
-    max-width: 240px;
+    max-width: 160px;
     height: auto;
     border-radius: 50%;
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
@@ -345,7 +345,7 @@ body.modal-is-open::before {
 .modal-body img {
     max-width: 100%;
     height: auto;
-    margin-top: 10px;
+    margin-top: 2px;
     border-radius: 5px;
 }
 
@@ -828,6 +828,7 @@ body.modal-is-open::before {
     transform: none;
     margin-bottom: 10px;
     bottom: 0;
+    display: none;
 }
 
 .carousel-dots {
@@ -1479,5 +1480,12 @@ body.admin-logged-in .favorite-main-btn {
     .carousel-buttons,
     .carousel-counter {
         display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .carousel-image-display {
+        /* Permite que a imagem ocupe até 75% da altura da tela em desktops e tablets */
+        max-height: 60vh;
     }
 }

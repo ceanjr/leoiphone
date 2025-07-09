@@ -18,39 +18,74 @@ body {
     color: var(--color-text-on-dark);
 }
 
+/* Esconde a barra superior quando um modal estiver aberto */
+body.modal-is-open .sticky-header {
+    transform: translateY(-100%);
+}
+
+.sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-dark-background);
+    padding: 5px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.sticky-header.visible {
+    transform: translateY(0);
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-brand-logo {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.header-brand-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-gold);
+}
+
 .top-bar {
-   width: 100%;
-   max-width: 800px; /* Alinhe com a largura máxima do seu container principal */
-   display: flex;
-   justify-content: space-between; /* Coloca o primeiro item à esquerda e o último à direita */
-   align-items: center;
-   padding: 0 20px; /* Adicione padding horizontal para não grudar nas bordas */
-   box-sizing: border-box; /* Garante que o padding não aumente a largura total */
-   /* Remova qualquer position: absolute ou fixed se não quiser que ela flutue */
+    width: 100%;
+    max-width: 800px;
+    /* Alinhe com a largura máxima do seu container principal */
+    display: flex;
+    justify-content: space-between;
+    /* Alterado para alinhar apenas à direita */
+    align-items: center;
+    padding: 10px 20px 0;
+    /* Adicionado padding para não grudar no header */
+    box-sizing: border-box;
+    /* Garante que o padding não aumente a largura total */
 }
 
 /* Novo estilo para agrupar os botões de administração e login */
 .admin-auth-group {
     display: flex;
-    gap: 10px; /* Espaço entre os botões */
-    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
-    justify-content: flex-end; /* Garante que fiquem alinhados à direita dentro do grupo */
+    gap: 10px;
+    /* Espaço entre os botões */
+    flex-wrap: wrap;
+    /* Permite que os botões quebrem a linha em telas menores */
+    justify-content: flex-end;
+    /* Garante que fiquem alinhados à direita dentro do grupo */
     align-items: center;
 }
-
-/* Remova a classe .auth-buttons antiga, pois ela não é mais necessária para o posicionamento global */
-/* .auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    justify-content: flex-end;
-    max-width: 800px;
-    flex-wrap: wrap;
-    padding: 0 20px;
-    box-sizing: border-box;
-} */
-
 
 .header-logo {
     margin-bottom: 20px;
@@ -269,9 +304,12 @@ body {
 
 
 .modal-header {
-    display: flex; /* Torna o cabeçalho um contêiner flexível */
-    justify-content: space-between; /* Espaça os itens: título+favorito à esquerda, close à direita */
-    align-items: center; /* Centraliza verticalmente os itens */
+    display: flex;
+    /* Torna o cabeçalho um contêiner flexível */
+    justify-content: space-between;
+    /* Espaça os itens: título+favorito à esquerda, close à direita */
+    align-items: center;
+    /* Centraliza verticalmente os itens */
 }
 
 .modal-header h2 {
@@ -287,7 +325,7 @@ body {
 .modal-body img {
     max-width: 100%;
     height: auto;
-    margin-top: 2px;
+    margin-top: 10px;
     border-radius: 5px;
 }
 
@@ -356,23 +394,8 @@ body {
     color: #c82333;
 }
 
-/* A classe .auth-buttons original será removida ou redefinida */
-/* Se você ainda a usa em outros lugares para botões agrupados que não sejam no topo,
-   pode ser necessário renomeá-la ou ajustá-la para o novo contexto.
-   Para o propósito de posicionar os botões no topo, ela é removida/ignorada aqui. */
-/* .auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    justify-content: flex-end;
-    max-width: 800px;
-    flex-wrap: wrap;
-    padding: 0 20px;
-    box-sizing: border-box;
-} */
-
-.auth-buttons button { /* Este seletor ainda pode afetar os botões dentro de .admin-auth-group */
+.auth-buttons button {
+    /* Este seletor ainda pode afetar os botões dentro de .admin-auth-group */
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -597,6 +620,14 @@ body {
     box-sizing: border-box;
 }
 
+.favorites-share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
 .share-btn {
     display: flex;
     align-items: center;
@@ -618,13 +649,11 @@ body {
     width: 20px;
     height: 20px;
     margin-right: 8px;
-    vertical-align: middle;
 }
 
 .whatsapp-share-btn {
     background-color: #25D366;
     color: white;
-    padding-block: 10px;
 }
 
 .whatsapp-share-btn:hover {
@@ -923,39 +952,25 @@ h1 {
 }
 
 @media (max-width: 768px) {
-
-    /* Remova este bloco se .auth-buttons não for mais usado para esse layout */
-    /* .auth-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0 10px;
-        position: relative;
-    }
-
-    .auth-buttons button {
-        width: calc(50% - 5px);
-        margin-bottom: 10px;
-        font-size: 0.9em;
-        padding: 8px 15px;
-    }
-
-    .auth-buttons button:last-child {
-        margin-bottom: 0;
-    } */
-
-    .top-bar { /* Ajuste para mobile se necessário, mas o flexbox já é responsivo */
+    .top-bar {
+        /* Ajuste para mobile se necessário, mas o flexbox já é responsivo */
         padding: 0 10px;
     }
 
     .admin-auth-group {
-        flex-direction: column; /* Empilha os botões em telas pequenas */
-        width: auto; /* Deixa o conteúdo determinar a largura */
-        align-items: flex-end; /* Alinha os botões à direita quando empilhados */
+        flex-direction: column;
+        /* Empilha os botões em telas pequenas */
+        width: auto;
+        /* Deixa o conteúdo determinar a largura */
+        align-items: flex-end;
+        /* Alinha os botões à direita quando empilhados */
     }
 
     .admin-auth-group button {
-        width: auto; /* Permite que o botão tenha a largura do conteúdo */
-        margin-bottom: 5px; /* Espaçamento entre os botões empilhados */
+        width: auto;
+        /* Permite que o botão tenha a largura do conteúdo */
+        margin-bottom: 5px;
+        /* Espaçamento entre os botões empilhados */
     }
 
     .modal-content {
@@ -1004,10 +1019,6 @@ h1 {
         padding: 10px;
     }
 
-    .header-logo img {
-        max-width: 120px;
-    }
-
     .container {
         padding: 10px;
     }
@@ -1016,8 +1027,10 @@ h1 {
         padding: 8px;
     }
 
-    .admin-auth-group button { /* Ajuste para botões de admin em telas muito pequenas */
-        width: 100%; /* Faz com que ocupem a largura total disponível */
+    .admin-auth-group button {
+        /* Ajuste para botões de admin em telas muito pequenas */
+        width: 100%;
+        /* Faz com que ocupem a largura total disponível */
     }
 
     .modal-content {
@@ -1127,10 +1140,6 @@ h1 {
 
 /* Favorites specific styles */
 .favorite-icon-btn {
-    /* Remova ou comente as seguintes linhas */
-    /* position: absolute; */
-    /* top: 10px; */
-    /* right: 50px; */
     background: none;
     border: none;
     cursor: pointer;
@@ -1148,12 +1157,13 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Espaçamento entre o título e o botão de favoritos */
+    gap: 10px;
+    /* Espaçamento entre o título e o botão de favoritos */
 }
 
 .carousel-product-title {
-    margin: 0; /* Remova margens padrão que podem atrapalhar o alinhamento flex */
-    /* Outros estilos existentes para o título permanecem */
+    margin: 0;
+    /* Remova margens padrão que podem atrapalhar o alinhamento flex */
 }
 
 .favorite-icon {
@@ -1181,19 +1191,26 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 5px;
-    /* Adicionado padding para o botão de favoritos no topo */
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
-    color: var(--color-text-on-dark); /* Cor do texto no botão */
+    color: var(--color-text-on-dark);
+    /* Cor do texto no botão */
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
+    background-color: transparent;
+}
+
+.favorite-main-btn:hover {
+    background-color: var(--color-light-gold);
 }
 
 .favorite-main-btn .favorite-icon {
-    color: var(--color-gold); /* Ícone branco/claro para o botão principal */
-    fill: currentColor; /* Preenche com a cor do texto do botão */
+    color: var(--color-gold);
+    /* Ícone branco/claro para o botão principal */
+    fill: currentColor;
+    /* Preenche com a cor do texto do botão */
     width: 26px;
     height: 26px;
 }
@@ -1251,8 +1268,6 @@ h1 {
     font-weight: 500;
     color: var(--color-gold);
     margin-top: 5px;
-    /* position: absolute; */
-    /* Removed absolute positioning for flow */
     right: 0;
     top: 6px;
 }
@@ -1279,36 +1294,21 @@ h1 {
     padding: 20px;
 }
 
-/* Remova este bloco se .auth-buttons não for mais usado para esse layout */
-/* @media (max-width: 768px) {
-    .auth-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0 10px;
-        position: relative;
-    }
-
-    .auth-buttons button {
-        width: calc(50% - 5px);
-        margin-bottom: 10px;
-        font-size: 0.9em;
-        padding: 8px 15px;
-    }
-
-    .auth-buttons button:last-child {
-        margin-bottom: 0;
-    }
-} */
-
 @media (max-width: 480px) {
     .admin-auth-group {
-        flex-direction: column; /* Empilha em telas muito pequenas */
-        align-items: stretch; /* Estica para preencher a largura disponível */
+        flex-direction: column;
+        /* Empilha em telas muito pequenas */
+        align-items: stretch;
+        /* Estica para preencher a largura disponível */
     }
+
     .admin-auth-group button {
-        width: 100%; /* Ocupa toda a largura disponível */
-        margin-bottom: 5px; /* Espaçamento entre os botões */
+        width: 100%;
+        /* Ocupa toda a largura disponível */
+        margin-bottom: 5px;
+        /* Espaçamento entre os botões */
     }
+
     .admin-auth-group button:last-child {
         margin-bottom: 0;
     }

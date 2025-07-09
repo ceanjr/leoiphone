@@ -16,6 +16,22 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }, 300);
     }
+
+    // Lógica para a barra de topo fixa ao rolar a página
+    const stickyHeader = document.querySelector('.sticky-header');
+    const catalogContainer = document.querySelector('.container');
+
+    if (stickyHeader && catalogContainer) {
+        const triggerPoint = catalogContainer.offsetTop;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY >= triggerPoint) {
+                stickyHeader.classList.add('visible');
+            } else {
+                stickyHeader.classList.remove('visible');
+            }
+        });
+    }
 });
 
 const firebaseConfig = {
@@ -1361,7 +1377,7 @@ function handleFiles(files, targetFilesArray, targetPreviewElement) {
 // Favorites Modal Functions
 window.openFavoritesModal = function () {
     renderFavoritesModal(); // chama a versão com total e botão
-
+    document.body.classList.add('modal-is-open'); // Adiciona classe ao body
     favoritesModal.style.display = 'flex';
     setTimeout(() => {
         favoritesModal.classList.add('is-active');
@@ -1480,8 +1496,7 @@ function renderFavoritesModal() {
     totalText.style.textAlign = "right";
 
     const shareButtonsContainer = document.createElement("div");
-    shareButtonsContainer.className = 'carousel-share-buttons'; // Reutiliza a classe para o layout dos botões
-    shareButtonsContainer.style.marginTop = '0';
+    shareButtonsContainer.className = 'favorites-share-buttons';
 
     // Botão para Léo
     const shareButtonLeo = document.createElement("button");
@@ -1505,6 +1520,7 @@ function renderFavoritesModal() {
 }
 
 window.closeFavoritesModal = function () {
+    document.body.classList.remove('modal-is-open'); // Remove classe do body
     favoritesModal.classList.remove('is-active');
     // Remove display: flex after animation ends
     favoritesModal.addEventListener('transitionend', function handler() {

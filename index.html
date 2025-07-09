@@ -22,7 +22,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">
-    <a id="robbu-whatsapp-button" target="_blank" href="https://api.whatsapp.com/send?phone=5577988343473" style="z-index: 1;">
+    <a id="robbu-whatsapp-button" target="_blank" href="https://api.whatsapp.com/send?phone=5577988343473"
+        style="z-index: 1;">
         <img src="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-icon.svg">
     </a>
     <link
@@ -32,6 +33,19 @@
 </head>
 
 <body>
+    <header class="sticky-header">
+        <div class="header-brand">
+            <img src="./img/logo.png" alt="Léo iPhone Logo" class="header-brand-logo">
+            <span class="header-brand-name">Léo iPhone</span>
+        </div>
+        <button id="showFavoritesButton" class="favorite-main-btn" onclick="openFavoritesModal()">
+            <svg class="favorite-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+        </button>
+    </header>
+
     <div class="top-bar">
         <div class="admin-auth-group">
             <button id="createCategoryButton" class="create-category-btn" onclick="openAddCategoryModal()"
@@ -45,7 +59,8 @@
 
         <button id="showFavoritesButton" class="favorite-main-btn" onclick="openFavoritesModal()">
             <svg class="favorite-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
         </button>
     </div>
@@ -279,8 +294,10 @@
                 <div class="title-and-favorite-group">
                     <h2 id="carouselProductTitle" class="carousel-product-title"></h2>
                     <button id="favoriteProductButton" class="favorite-icon-btn" onclick="toggleFavorite()">
-                        <svg class="favorite-icon" id="productFavoriteIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        <svg class="favorite-icon" id="productFavoriteIcon" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                         </svg>
                     </button>
                 </div>
@@ -292,10 +309,12 @@
 
             <div class="carousel-share-buttons">
                 <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('leo')">
-                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para <strong>Léo</strong></span>
+                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para
+                        <strong>Léo</strong></span>
                 </button>
                 <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('junior')">
-                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para <strong>Júnior</strong></span>
+                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para
+                        <strong>Júnior</strong></span>
                 </button>
             </div>
         </div>
@@ -316,7 +335,7 @@
             </div>
             <div class="modal-body">
                 <ul id="favoritesList" class="list-none p-0">
-                    </ul>
+                </ul>
             </div>
         </div>
     </div>

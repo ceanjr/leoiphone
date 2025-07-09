@@ -1434,3 +1434,50 @@ h1 {
 body.admin-logged-in .favorite-main-btn {
     display: none;
 }
+
+.carousel-dots {
+    position: absolute; /* Posicionamento absoluto dentro do container pai */
+    bottom: 15px;       /* Distância da parte inferior do container da imagem */
+    left: 50%;          /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajuste fino para centralização perfeita */
+    z-index: 10;        /* Garante que os dots fiquem acima da imagem */
+    
+    /* Estilo para o fundo dos dots para melhor visibilidade */
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 8px 12px;
+    border-radius: 16px;
+    
+    /* Remove o espaçamento superior que não é mais necessário */
+    text-align: center;
+}
+
+.carousel-dot {
+    cursor: pointer;
+    height: 9px;
+    width: 9px;
+    margin: 0 5px;
+    /* Cor mais clara para o dot inativo, para contrastar com o fundo escuro */
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-dot:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Estilo para o dot que representa a imagem ativa no carrossel */
+.carousel-dot.active {
+    background-color: var(--color-gold); /* Cor do dot ativo */
+    transform: scale(1.2); /* Deixa o dot ativo um pouco maior para destaque */
+}
+
+
+/* 2. Ocultar setas e contador em telas mobile (mantém o mesmo) */
+@media (max-width: 768px) {
+    .carousel-buttons,
+    .carousel-counter {
+        display: none;
+    }
+}

@@ -826,34 +826,39 @@ window.updateProduct = async function () {
         const oldImages = currentItemData ? currentItemData.images || [] : [];
 
         const uploadedUrls = [];
-const progressContainer = document.createElement('div');
-addProductModal.querySelector('.modal-body').appendChild(progressContainer);
+        const progressContainer = document.createElement('div');
+        // It's better to append progressContainer to a specific element within the modal
+        // For simplicity in this example, assuming it can be appended to body or a relevant modal part.
+        // A more robust solution might involve adding a dedicated progress area in the edit modal.
+        // For now, I'll keep it as is, just noting the potential for better placement.
+        editProductModal.querySelector('.modal-body').appendChild(progressContainer); // Changed from addProductModal
 
-for (const file of uploadedImageFilesAdd) {
-    const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+        // FIX: Use uploadedImageFilesEdit instead of uploadedImageFilesAdd
+        for (const file of uploadedImageFilesEdit) { // Changed from uploadedImageFilesAdd
+            const storageRef = ref(storage, `product_images/${Date.now()}-${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
 
-    const { container, fill } = createProgressBar(file.name);
-    progressContainer.appendChild(container);
+            const { container, fill } = createProgressBar(file.name);
+            progressContainer.appendChild(container);
 
-    await new Promise((resolve, reject) => {
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                fill.style.width = `${progress}%`;
-            },
-            (error) => {
-                console.error("Erro no upload:", error);
-                reject(error);
-            },
-            async () => {
-                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                uploadedUrls.push(downloadURL);
-                resolve();
-            }
-        );
-    });
-}
+            await new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        fill.style.width = `${progress}%`;
+                    },
+                    (error) => {
+                        console.error("Erro no upload:", error);
+                        reject(error);
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        uploadedUrls.push(downloadURL);
+                        resolve();
+                    }
+                );
+            });
+        }
 
         const finalImages = [...uploadedImageUrlsEdit, ...uploadedUrls, ...textImages];
 

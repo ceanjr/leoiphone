@@ -987,6 +987,7 @@ window.toggleFavorite = function() {
 }
 
 window.openImageCarouselModal = function (product) {
+    document.body.classList.add('modal-is-open');
     currentProductInCarousel = product;
     currentCarouselImages = product.images;
     currentImageIndex = 0;
@@ -1018,6 +1019,7 @@ window.openImageCarouselModal = function (product) {
 };
 
 window.closeImageCarouselModal = function () {
+    document.body.classList.remove('modal-is-open');
     imageCarouselModal.style.display = 'none';
     carouselImage.src = '';
     currentCarouselImages = [];

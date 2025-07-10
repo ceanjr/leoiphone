@@ -1,5 +1,3 @@
-import { inject } from "@vercel/analytics"
-
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('produto');
@@ -1578,5 +1576,4 @@ function removeFromFavorites(productId) {
     }
 }
 
-inject();
 window.onload = initializeFirebase;

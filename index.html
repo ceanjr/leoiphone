@@ -49,18 +49,21 @@
     <div class="top-bar">
         <div class="actions-container">
             <button id="authButton" class="login-btn" onclick="toggleAuth()">Login</button>
-    
-        <div id="adminMenu" class="admin-menu" style="display: none;">
-            <button class="admin-menu-btn" onclick="toggleAdminMenu()">Ações &#9662;</button>
-            <div id="adminDropdownContent" class="admin-dropdown-content">
-                <button id="createProductButton" onclick="openAddProductModal(); closeAdminMenu();">Criar Novo Produto</button>
-                <button id="createCategoryButton" onclick="openAddCategoryModal(); closeAdminMenu();">Criar Categoria</button>
-                <button id="manageCategoriesButton" onclick="openManageCategoriesModal(); closeAdminMenu();">Gerir Categorias</button>
-                <button id="logoutButton" onclick="logout()">Sair</button>
+
+            <div id="adminMenu" class="admin-menu" style="display: none;">
+                <button class="admin-menu-btn" onclick="toggleAdminMenu()">Ações &#9662;</button>
+                <div id="adminDropdownContent" class="admin-dropdown-content">
+                    <button id="createProductButton" onclick="openAddProductModal(); closeAdminMenu();">Criar Novo
+                        Produto</button>
+                    <button id="createCategoryButton" onclick="openAddCategoryModal(); closeAdminMenu();">Criar
+                        Categoria</button>
+                    <button id="manageCategoriesButton" onclick="openManageCategoriesModal(); closeAdminMenu();">Gerir
+                        Categorias</button>
+                    <button id="logoutButton" onclick="logout()">Sair</button>
+                </div>
             </div>
         </div>
-    </div>
-    
+
         <button id="showFavoritesButton" class="favorite-main-btn" onclick="openFavoritesModal()">
             <svg class="favorite-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -344,6 +347,10 @@
         </div>
     </div>
 
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <script src="./script.js" type="module"></script>
 </body>
 

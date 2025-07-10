@@ -1,3 +1,5 @@
+import { inject } from "@vercel/analytics"
+
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('produto');
@@ -566,6 +568,8 @@ function renderItems() {
         noItemsMessage.className = "text-center text-gray-500 py-4";
         itemList.appendChild(noItemsMessage);
     }
+
+    inject;
 }
 
 function createProgressBar(fileName) {

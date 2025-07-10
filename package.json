@@ -5,5 +5,8 @@
   "scripts": {
     "start": "live-server",
     "build": "node build-script.js"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0"
   }
 }

@@ -569,7 +569,7 @@ function renderItems() {
         itemList.appendChild(noItemsMessage);
     }
 
-    inject;
+    inject();
 }
 
 function createProgressBar(fileName) {

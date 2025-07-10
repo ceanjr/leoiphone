@@ -568,8 +568,6 @@ function renderItems() {
         noItemsMessage.className = "text-center text-gray-500 py-4";
         itemList.appendChild(noItemsMessage);
     }
-
-    inject();
 }
 
 function createProgressBar(fileName) {
@@ -1580,5 +1578,5 @@ function removeFromFavorites(productId) {
     }
 }
 
-
+inject();
 window.onload = initializeFirebase;

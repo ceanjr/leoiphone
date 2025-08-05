@@ -1,362 +1,558 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<head>
+  <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQZDWY5YKK"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XQZDWY5YKK"
+    ></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
 
-        gtag('config', 'G-XQZDWY5YKK');
+      gtag('config', 'G-XQZDWY5YKK');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Catálogo de iPhones com qualidade, procedência e ótimo atendimento. Veja modelos disponíveis!">
-    <meta name="keywords" content="iPhone, Apple, smartphones, catálogo, Léo iPhone, Vitoria da Conquista">
-    <meta name="author" content="Léo iPhone">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Catálogo de iPhones com qualidade, procedência e ótimo atendimento. Veja modelos disponíveis!"
+    />
+    <meta
+      name="keywords"
+      content="iPhone, Apple, smartphones, catálogo, Léo iPhone, Vitoria da Conquista"
+    />
+    <meta name="author" content="Léo iPhone" />
 
-    <meta property="og:title" content="Catálogo Léo iPhone">
-    <meta property="og:description"
-        content="Veja os modelos disponíveis de iPhones com preço, imagens e informações detalhadas.">
-    <meta property="og:url" content="https://leoiphone.com.br">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Léo iPhone">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta property="og:title" content="Catálogo Léo iPhone" />
+    <meta
+      property="og:description"
+      content="Veja os modelos disponíveis de iPhones com preço, imagens e informações detalhadas."
+    />
+    <meta property="og:url" content="https://leoiphone.com.br" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Léo iPhone" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="shortcut icon" href="img/favicon.ico" />
     <title>Léo iPhone - Catálogo de Produtos</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">
-    <a id="robbu-whatsapp-button" target="_blank" href="https://api.whatsapp.com/send?phone=5577988343473"
-        style="z-index: 1;">
-        <img src="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-icon.svg">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css"
+    />
+    <a
+      id="robbu-whatsapp-button"
+      target="_blank"
+      href="https://api.whatsapp.com/send?phone=5577988343473"
+      style="z-index: 1"
+    >
+      <img
+        src="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-icon.svg"
+      />
     </a>
     <link
-        href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
+      href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <header class="sticky-header">
-        <div class="header-brand">
-            <img src="./img/logo.png" alt="Léo iPhone Logo" class="header-brand-logo">
-            <span class="header-brand-name">Léo iPhone</span>
-        </div>
-        <button id="showFavoritesButton" class="favorite-main-btn" onclick="openFavoritesModal()">
-            <svg class="favorite-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-        </button>
+      <div class="header-brand">
+        <img
+          src="./img/logo.png"
+          alt="Léo iPhone Logo"
+          class="header-brand-logo"
+        />
+        <span class="header-brand-name">Léo iPhone</span>
+      </div>
+      <button
+        id="showFavoritesButton"
+        class="favorite-main-btn"
+        onclick="openFavoritesModal()"
+      >
+        <svg
+          class="favorite-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
+      </button>
     </header>
 
     <div class="top-bar">
-        <div class="actions-container">
-            <button id="authButton" class="login-btn" onclick="toggleAuth()">Login</button>
-
-            <div id="adminMenu" class="admin-menu" style="display: none;">
-                <button class="admin-menu-btn" onclick="toggleAdminMenu()">Ações &#9662;</button>
-                <div id="adminDropdownContent" class="admin-dropdown-content">
-                    <button id="createProductButton" onclick="openAddProductModal(); closeAdminMenu();">Criar Novo
-                        Produto</button>
-                    <button id="createCategoryButton" onclick="openAddCategoryModal(); closeAdminMenu();">Criar
-                        Categoria</button>
-                    <button id="manageCategoriesButton" onclick="openManageCategoriesModal(); closeAdminMenu();">Gerir
-                        Categorias</button>
-                    <button id="logoutButton" onclick="logout()">Sair</button>
-                </div>
-            </div>
-        </div>
-
-        <button id="showFavoritesButton" class="favorite-main-btn" onclick="openFavoritesModal()">
-            <svg class="favorite-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
+      <div class="actions-container">
+        <button id="authButton" class="login-btn" onclick="toggleAuth()">
+          Login
         </button>
+
+        <div id="adminMenu" class="admin-menu" style="display: none">
+          <button class="admin-menu-btn" onclick="toggleAdminMenu()">
+            Ações &#9662;
+          </button>
+          <div id="adminDropdownContent" class="admin-dropdown-content">
+            <button
+              id="createProductButton"
+              onclick="openAddProductModal(); closeAdminMenu();"
+            >
+              Criar Novo Produto
+            </button>
+            <button
+              id="createCategoryButton"
+              onclick="openAddCategoryModal(); closeAdminMenu();"
+            >
+              Criar Categoria
+            </button>
+            <button
+              id="manageCategoriesButton"
+              onclick="openManageCategoriesModal(); closeAdminMenu();"
+            >
+              Gerir Categorias
+            </button>
+            <button id="logoutButton" onclick="logout()">Sair</button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="showFavoritesButton"
+        class="favorite-main-btn"
+        onclick="openFavoritesModal()"
+      >
+        <svg
+          class="favorite-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
+      </button>
     </div>
 
     <div class="header-logo">
-        <img src="./img/logo.png" alt="Léo iPhone Logo">
+      <img src="./img/logo.png" alt="Léo iPhone Logo" />
     </div>
 
     <div class="about-section">
-        <p>São mais de 10 anos no mercado de iPhones, entregando qualidade, procedência e aquele atendimento que faz
-            diferença.</p>
+      <p>
+        São mais de 10 anos no mercado de iPhones, entregando qualidade,
+        procedência e aquele atendimento que faz diferença.
+      </p>
     </div>
 
     <div class="container">
-        <h1 class="text-3xl font-bold mb-6 text-center">Catálogo</h1>
+      <h1 class="text-3xl font-bold mb-6 text-center">Catálogo</h1>
 
-        <div class="category-filter">
-            <label for="categoryFilter">Filtrar por Categoria:</label>
-            <select id="categoryFilter" onchange="filterProductsByCategory()">
-                <option value="all">Tudo</option>
+      <div class="category-filter">
+        <label for="categoryFilter">Filtrar por Categoria:</label>
+        <select id="categoryFilter" onchange="filterProductsByCategory()">
+          <option value="all">Tudo</option>
+        </select>
+      </div>
 
-            </select>
-        </div>
+      <div class="product-search-bar">
+        <label for="productSearch">Buscar Produtos:</label>
+        <input
+          type="text"
+          id="productSearch"
+          placeholder="Digite o nome do produto..."
+          onkeyup="filterProductsByName()"
+          class="focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        <div class="product-search-bar">
-            <label for="productSearch">Buscar Produtos:</label>
-            <input type="text" id="productSearch" placeholder="Digite o nome do produto..."
-                onkeyup="filterProductsByName()" class="focus:ring-blue-500 focus:border-blue-500">
-        </div>
-
-        <ul id="itemList" class="list-none p-0">
-
-        </ul>
+      <ul id="itemList" class="list-none p-0"></ul>
     </div>
 
     <div class="modal" id="itemModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle"></h2>
-                <button class="close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="modalDescription"></p>
-                <div class="photo-gallery" id="modalGallery">
-
-                </div>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle"></h2>
+          <button class="close" onclick="closeModal()">&times;</button>
         </div>
+        <div class="modal-body">
+          <p id="modalDescription"></p>
+          <div class="photo-gallery" id="modalGallery"></div>
+        </div>
+      </div>
     </div>
 
     <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Autenticação</h2>
-                <button class="close" onclick="closeLoginModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center mb-4">Insira o token de administrador:</p>
-                <input type="password" id="adminTokenInput" placeholder="Token"
-                    class="w-full p-2 border border-gray-300 rounded-md">
-                <button onclick="authenticateAdmin()"
-                    class="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Entrar</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Autenticação</h2>
+          <button class="close" onclick="closeLoginModal()">&times;</button>
         </div>
+        <div class="modal-body">
+          <p class="text-center mb-4">Insira o token de administrador:</p>
+          <input
+            type="password"
+            id="adminTokenInput"
+            placeholder="Token"
+            class="w-full p-2 border border-gray-300 rounded-md"
+          />
+          <button
+            onclick="authenticateAdmin()"
+            class="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+          >
+            Entrar
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="modal message-modal" id="messageModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="messageModalTitle"></h2>
-                <button class="close" onclick="closeMessageModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="messageModalText"></p>
-                <button onclick="closeMessageModal()">OK</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="messageModalTitle"></h2>
+          <button class="close" onclick="closeMessageModal()">&times;</button>
         </div>
+        <div class="modal-body">
+          <p id="messageModalText"></p>
+          <button onclick="closeMessageModal()">OK</button>
+        </div>
+      </div>
     </div>
 
     <div class="modal confirm-modal" id="confirmModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="confirmModalTitle">Confirmar Exclusão</h2>
-                <button class="close" onclick="closeConfirmModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmModalText">Tem certeza que deseja remover este item?</p>
-                <button class="confirm-yes" onclick="executeConfirmedDeletion()">Sim</button>
-                <button class="confirm-no" onclick="closeConfirmModal()">Não</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="confirmModalTitle">Confirmar Exclusão</h2>
+          <button class="close" onclick="closeConfirmModal()">&times;</button>
         </div>
+        <div class="modal-body">
+          <p id="confirmModalText">Tem certeza que deseja remover este item?</p>
+          <button class="confirm-yes" onclick="executeConfirmedDeletion()">
+            Sim
+          </button>
+          <button class="confirm-no" onclick="closeConfirmModal()">Não</button>
+        </div>
+      </div>
     </div>
 
-    <div id="adminPanel" style="display: none;">
-    </div>
+    <div id="adminPanel" style="display: none"></div>
 
     <div class="modal product-form-modal" id="addProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Adicionar Novo Produto</h2>
-                <button class="close" onclick="closeAddProductModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <label for="productTitle">Título</label>
-                <input type="text" id="productTitle" placeholder="Título do produto"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="productCode">Código do Produto (Opcional)</label>
-                <input type="text" id="productCode" placeholder="Ex: IP15PM-AZUL-256GB"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="productDescription">Descrição</label>
-                <textarea id="productDescription" placeholder="Descrição do produto"
-                    class="focus:ring-blue-500 focus:border-blue-500"></textarea>
-
-                <label for="productPrice">Preço</label>
-                <input type="number" id="productPrice" placeholder="Preço do produto (ex: 99.99)" step="0.01"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="productCategory">Categoria</label>
-                <select id="productCategory" class="focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Selecione uma categoria</option>
-
-                </select>
-
-                <label for="productImages">URLs das Imagens (separadas por vírgula)</label>
-                <input type="text" id="productImages" placeholder="URL1, URL2, URL3"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <div class="drop-area" id="dropAreaAdd">
-                    <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
-                    <input type="file" id="imageUploadAdd" multiple accept="image/*" style="display: none;">
-                </div>
-                <div class="dragged-images-preview" id="draggedImagesPreviewAdd"></div>
-
-                <button onclick="addProduct()" id="addProductButton">Adicionar Produto
-                    <span id="addProductSpinner" class="spinner" style="display: none;"></span>
-                </button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Adicionar Novo Produto</h2>
+          <button class="close" onclick="closeAddProductModal()">
+            &times;
+          </button>
         </div>
+        <div class="modal-body">
+          <label for="productTitle">Título</label>
+          <input
+            type="text"
+            id="productTitle"
+            placeholder="Título do produto"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="productCode">Código do Produto (Opcional)</label>
+          <input
+            type="text"
+            id="productCode"
+            placeholder="Ex: IP15PM-AZUL-256GB"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="productDescription">Descrição</label>
+          <textarea
+            id="productDescription"
+            placeholder="Descrição do produto"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          ></textarea>
+
+          <label for="productPrice">Preço</label>
+          <input
+            type="number"
+            id="productPrice"
+            placeholder="Preço do produto (ex: 99.99)"
+            step="0.01"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="productCategory">Categoria</label>
+          <select
+            id="productCategory"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Selecione uma categoria</option>
+          </select>
+
+          <label for="productImages"
+            >URLs das Imagens (separadas por vírgula)</label
+          >
+          <input
+            type="text"
+            id="productImages"
+            placeholder="URL1, URL2, URL3"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <div class="drop-area" id="dropAreaAdd">
+            <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
+            <input
+              type="file"
+              id="imageUploadAdd"
+              multiple
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+          <div
+            class="dragged-images-preview"
+            id="draggedImagesPreviewAdd"
+          ></div>
+
+          <button onclick="addProduct()" id="addProductButton">
+            Adicionar Produto
+            <span
+              id="addProductSpinner"
+              class="spinner"
+              style="display: none"
+            ></span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="modal product-form-modal" id="editProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Editar Produto</h2>
-                <button class="close" onclick="closeEditProductModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editProductId">
-                <label for="editProductTitle">Título</label>
-                <input type="text" id="editProductTitle" placeholder="Título do produto"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="editProductCode">Código do Produto (Opcional)</label>
-                <input type="text" id="editProductCode" placeholder="Ex: IP15PM-AZUL-256GB"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="editProductDescription">Descrição</label>
-                <textarea id="editProductDescription" placeholder="Descrição do produto"
-                    class="focus:ring-blue-500 focus:border-blue-500"></textarea>
-
-                <label for="editProductPrice">Preço</label>
-                <input type="number" id="editProductPrice" placeholder="Preço do produto (ex: 99.99)" step="0.01"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <label for="editProductCategory">Categoria</label>
-                <select id="editProductCategory" class="focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Selecione uma categoria</option>
-
-                </select>
-
-                <label for="editProductImages">URLs das Imagens (separadas por vírgula)</label>
-                <input type="text" id="editProductImages" placeholder="URL1, URL2, URL3"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-
-                <div class="drop-area" id="dropAreaEdit">
-                    <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
-                    <input type="file" id="imageUploadEdit" multiple accept="image/*" style="display: none;">
-                </div>
-                <div class="dragged-images-preview" id="draggedImagesPreviewEdit"></div>
-
-                <button onclick="updateProduct()">Guardar Alterações</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Editar Produto</h2>
+          <button class="close" onclick="closeEditProductModal()">
+            &times;
+          </button>
         </div>
+        <div class="modal-body">
+          <input type="hidden" id="editProductId" />
+          <label for="editProductTitle">Título</label>
+          <input
+            type="text"
+            id="editProductTitle"
+            placeholder="Título do produto"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="editProductCode">Código do Produto (Opcional)</label>
+          <input
+            type="text"
+            id="editProductCode"
+            placeholder="Ex: IP15PM-AZUL-256GB"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="editProductDescription">Descrição</label>
+          <textarea
+            id="editProductDescription"
+            placeholder="Descrição do produto"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          ></textarea>
+
+          <label for="editProductPrice">Preço</label>
+          <input
+            type="number"
+            id="editProductPrice"
+            placeholder="Preço do produto (ex: 99.99)"
+            step="0.01"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <label for="editProductCategory">Categoria</label>
+          <select
+            id="editProductCategory"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Selecione uma categoria</option>
+          </select>
+
+          <label for="editProductImages"
+            >URLs das Imagens (separadas por vírgula)</label
+          >
+          <input
+            type="text"
+            id="editProductImages"
+            placeholder="URL1, URL2, URL3"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+
+          <div class="drop-area" id="dropAreaEdit">
+            <p>Arraste e Solte Imagens Aqui ou Clique para Selecionar</p>
+            <input
+              type="file"
+              id="imageUploadEdit"
+              multiple
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+          <div
+            class="dragged-images-preview"
+            id="draggedImagesPreviewEdit"
+          ></div>
+
+          <button onclick="updateProduct()">Guardar Alterações</button>
+        </div>
+      </div>
     </div>
 
     <div class="modal category-form-modal" id="addCategoryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Criar Nova Categoria</h2>
-                <button class="close" onclick="closeAddCategoryModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <label for="categoryName">Nome da Categoria</label>
-                <input type="text" id="categoryName" placeholder="Nome da categoria"
-                    class="focus:ring-blue-500 focus:border-blue-500">
-                <button onclick="addCategory()">Adicionar Categoria</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Criar Nova Categoria</h2>
+          <button class="close" onclick="closeAddCategoryModal()">
+            &times;
+          </button>
         </div>
+        <div class="modal-body">
+          <label for="categoryName">Nome da Categoria</label>
+          <input
+            type="text"
+            id="categoryName"
+            placeholder="Nome da categoria"
+            class="focus:ring-blue-500 focus:border-blue-500"
+          />
+          <button onclick="addCategory()">Adicionar Categoria</button>
+        </div>
+      </div>
     </div>
 
     <div class="modal manage-categories-modal" id="manageCategoriesModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Gerir Categorias</h2>
-                <button class="close" onclick="closeManageCategoriesModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <ul id="manageCategoryList" class="list-none p-0">
-
-                </ul>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Gerir Categorias</h2>
+          <button class="close" onclick="closeManageCategoriesModal()">
+            &times;
+          </button>
         </div>
+        <div class="modal-body">
+          <ul id="manageCategoryList" class="list-none p-0"></ul>
+        </div>
+      </div>
     </div>
 
     <div class="modal image-carousel-modal" id="imageCarouselModal">
-        <div class="modal-content">
-            <button class="close" onclick="closeImageCarouselModal()">&times;</button>
-            <div class="carousel-image-display">
-                <img id="carouselImage" src="" alt="Imagem do Carrossel" loading="lazy">
-                <div id="imageLoader" class="image-loader" style="display: none;"></div>
-                <div class="carousel-counter" id="carouselCounter"></div>
-                <div class="carousel-dots" id="carouselDots"></div>
-                <div class="carousel-buttons">
-                    <button onclick="prevImage()">&#10094;</button>
-                    <button onclick="nextImage()">&#10095;</button>
-                </div>
-            </div>
-            <div class="modal-header">
-                <div class="title-and-favorite-group">
-                    <h2 id="carouselProductTitle" class="carousel-product-title"></h2>
-                    <button id="favoriteProductButton" class="favorite-icon-btn" onclick="toggleFavorite()">
-                        <svg class="favorite-icon" id="productFavoriteIcon" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="carousel-info">
-                <p id="carouselProductDescription" class="carousel-product-description"></p>
-                <p id="carouselProductPrice" class="carousel-product-price"></p>
-            </div>
-
-            <div class="carousel-share-buttons">
-                <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('leo')">
-                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para
-                        <strong>Léo</strong></span>
-                </button>
-                <button class="share-btn whatsapp-share-btn" onclick="shareProductOnWhatsApp('junior')">
-                    <img src="img/whatsapp.svg" alt="WhatsApp" class="share-icon"><span>Enviar para
-                        <strong>Júnior</strong></span>
-                </button>
-            </div>
+      <div class="modal-content">
+        <button class="close" onclick="closeImageCarouselModal()">
+          &times;
+        </button>
+        <div class="carousel-image-display">
+          <img
+            id="carouselImage"
+            src=""
+            alt="Imagem do Carrossel"
+            loading="lazy"
+          />
+          <div
+            id="imageLoader"
+            class="image-loader"
+            style="display: none"
+          ></div>
+          <div class="carousel-counter" id="carouselCounter"></div>
+          <div class="carousel-dots" id="carouselDots"></div>
+          <div class="carousel-buttons">
+            <button onclick="prevImage()">&#10094;</button>
+            <button onclick="nextImage()">&#10095;</button>
+          </div>
         </div>
+        <div class="modal-header">
+          <div class="title-and-favorite-group">
+            <h2 id="carouselProductTitle" class="carousel-product-title"></h2>
+            <button
+              id="favoriteProductButton"
+              class="favorite-icon-btn"
+              onclick="toggleFavorite()"
+            >
+              <svg
+                class="favorite-icon"
+                id="productFavoriteIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="carousel-info">
+          <p
+            id="carouselProductDescription"
+            class="carousel-product-description"
+          ></p>
+          <p id="carouselProductPrice" class="carousel-product-price"></p>
+        </div>
+
+        <div class="carousel-share-buttons">
+          <button
+            class="share-btn whatsapp-share-btn"
+            onclick="shareProductOnWhatsApp('leo')"
+          >
+            <img
+              src="img/whatsapp.svg"
+              alt="WhatsApp"
+              class="share-icon"
+            /><span>Enviar para <strong>Léo</strong></span>
+          </button>
+          <button
+            class="share-btn whatsapp-share-btn"
+            onclick="shareProductOnWhatsApp('junior')"
+          >
+            <img
+              src="img/whatsapp.svg"
+              alt="WhatsApp"
+              class="share-icon"
+            /><span>Enviar para <strong>Júnior</strong></span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="modal fullscreen-image-modal" id="fullscreenImageModal">
-        <div class="modal-content-fullscreen">
-            <span class="close-fullscreen" onclick="closeFullscreenImageModal()">&times;</span>
-            <img id="fullscreenImage" src="" alt="Imagem em Tela Cheia" loading="lazy">
-        </div>
+      <div class="modal-content-fullscreen">
+        <span class="close-fullscreen" onclick="closeFullscreenImageModal()"
+          >&times;</span
+        >
+        <img
+          id="fullscreenImage"
+          src=""
+          alt="Imagem em Tela Cheia"
+          loading="lazy"
+        />
+      </div>
     </div>
 
     <div class="modal" id="favoritesModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Meus Favoritos</h2>
-                <button class="close" onclick="closeFavoritesModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <ul id="favoritesList" class="list-none p-0">
-                </ul>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Meus Favoritos</h2>
+          <button class="close" onclick="closeFavoritesModal()">&times;</button>
         </div>
+        <div class="modal-body">
+          <ul id="favoritesList" class="list-none p-0"></ul>
+        </div>
+      </div>
     </div>
 
     <script src="./script.js" type="module"></script>
-</body>
-
+  </body>
 </html>

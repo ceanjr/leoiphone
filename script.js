@@ -292,7 +292,7 @@ const draggedImagesPreviewEdit = document.getElementById(
   'draggedImagesPreviewEdit'
 );
 
-const adminToken = '';
+const adminToken = '050990';
 
 window.showMessage = function (title, message) {
   messageModalTitle.textContent = title;
